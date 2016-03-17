@@ -96,21 +96,26 @@ function PlaceRefresh(googleMap , googlePlace){
       }
     }
 
-    this.googleNearbySearch = function(places) {
+    this.googleNearbySearch = function(tag) {
+      var places = [];
+      if (tag === undefined)
+          tag = ['restaurant'];
       var request = {
         bounds: googleMap.getBounds(),
-        types: ['restaurant']
+        types: ['parking']
       };
 
       if(_keywordSearchBox !== undefined && _keywordSearchBox.value !== "")
           request.keyword = _keywordSearchBox.value;
 
       googlePlace.nearbySearch(request, function (results) {
+          console.log("obtain parking info");
+          console.log(results);
           for (var i in results) {
             var newPlace = {
               google_id : results[i].place_id,
-              lng : results[i].geometry.location.G,
-              lat : results[i].geometry.location.K,
+              lng : results[i].geometry.location.lng(),
+              lat : results[i].geometry.location.lat(),
               rating : results[i].rating,
               info : results[i]
             };
@@ -121,8 +126,11 @@ function PlaceRefresh(googleMap , googlePlace){
       });
     }
 
-    this.nearbySearch = function () {
-        this.yelpNearbySearch();
+    this.nearbySearch = function (tag) {
+        if (this.NEARBY_SEARCH == 'yelp')
+            this.yelpNearbySearch(tag);
+        else
+            this.googleNearbySearch(tag);
     }
 
     // nearbySearch will search 20 places in the view
@@ -144,9 +152,6 @@ function PlaceRefresh(googleMap , googlePlace){
 
         var terms = 'food';
         var bound = googleMap.getBounds();
-        console.log(bound);
-        console.log(bound.getSouthWest());
-        console.log(bound.getNorthEast());
         var sw = bound.getSouthWest();
         var ne = bound.getNorthEast();
         var bounds = sw.lat() + ',' + sw.lng() + '|' + ne.lat() + ',' + ne.lng();
@@ -206,6 +211,8 @@ function PlaceRefresh(googleMap , googlePlace){
 
     // after nearby/radarSearch, unpdatePlace will be call to update _places
     var yelpUpdatePlace = function(results , status){
+
+      console.log(results);
 
 	  var oldPlaceIdx = [];
       // add places
