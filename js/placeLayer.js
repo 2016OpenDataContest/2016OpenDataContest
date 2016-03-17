@@ -1,7 +1,7 @@
 function PlaceLayer(map) {
-	
+    
     var _obj = this;
-	_obj.setMap(map);
+    _obj.setMap(map);
 
     var dragEvent; 
 
@@ -14,20 +14,78 @@ function PlaceLayer(map) {
     // div elements of nodes and edges (visible)
     var _selectionNode;
     var _selectionEdge;
-	
-	// a function call when click a node
+    
+    // a function call when click a node
     var _onClickNode;
 
+    function checkInbound(place)
+    {
+        if(place.info.location.coordinate.longitude === undefined)
+        {
+            console.log("**WARRN: lat and lng is undefined");
+            console.log(place);
+        return true;
+        }
+        var position = new google.maps.LatLng(place.info.location.coordinate.latitude, place.info.location.coordinate.longitude);
+        return map.getBounds().contains(position);
+    }
+    function laglng2px(place)
+    {
+        if(place.info.location.coordinate.longitude === undefined)
+        {
+            console.log("**WARRN: lat and lng is undefined");
+            console.log(place);
+            return true;
+        }
+        var position = new google.maps.LatLng(place.info.location.coordinate.latitude, place.info.location.coordinate.longitude);
+        var p = _projection.fromLatLngToDivPixel(position);
+        place.x = p.x;
+        place.y = p.y;
+        place.px = p.x;
+        place.py = p.y;
+
+        return map.getBounds().contains(position);
+    }
+
+    function createLargeNode(place)
+    {
+        var ret = {
+            info: place.info,
+            radius: parseInt((place.rating)*(place.rating)*(place.rating)/1.2),
+            fixed: false,
+            color: color(),
+            x : place.x,
+            y : place.y
+        };
+        if(undefined === ret.radius || ret.radius < 10)
+            ret.radius = 10;
+        return ret;
+    }
+
+    function createSmallNode(place)
+    {
+        var ret = {
+            info : place.info,
+            fixed : true,
+            radius : 5,
+            color : "#777777",
+            x : place.x,
+            y : place.y
+        };
+
+        return ret;
+    }
+
     // modify _places according to old place index and new places
-    this.showPlace = function (newPlaces) {
+    this.showPlace = function (places) {
 
         // add newPlaces[i].x and newPlaces[i].y
-        convertLatLng(newPlaces);
+        convertLatLng(places);
 
-        var nodes = createNodes(newPlaces);
-        var edges = createEdges(newPlaces);
-		
-		this.updateData(nodes , edges);
+        var nodes = createNodes(places);
+        var edges = createEdges(nodes);
+        
+        this.updateData(nodes , edges);
         _overlayLayer.style('visibility','visible');
 
     };
@@ -35,62 +93,48 @@ function PlaceLayer(map) {
     var createNodes = function (places) {
         if(_selectionNode !== undefined)
         {
-            var addPlace = [];
-            var noRemovePlace = [];
             var nodes = _selectionNode.data();
-            for (var i = 0 ; i < places.length ; i += 1)
+
+            for (var i = 0 ; i < nodes.length/2 ; i+=1)
             {
-                //console.log("#d" + places[i].info.id);
-                var nd = d3.select("#d" + places[i].info.id);
-                //console.log(nd.data());
-                if(nd[0][0] !== null)
-                {
-                    addPlace.push(places[i]);
-                    var idx= nodes.indexOf(nd.data()[0]);
-                    noRemovePlace[idx] = true;
-                }
-            }
-            //console.log(addPlace);
-            //console.log(noRemovePlace);
-
-        }
-        {
-            ret = [];
-            // build small nodes
-            for (var i in places) {
-                ret.push(clone(places[i]));
-                ret[ret.length - 1].fixed = true;
-                ret[ret.length - 1].radius = 5;
-                ret[ret.length - 1].color = "#777777";
+                var lNode = nodes[i + nodes.length/2];
+                var p = places.find(function(p){return p.info.name == lNode.info.name;});
+                if(p === undefined)
+                    continue;
+                p.x = lNode.x;
+                p.y = lNode.y;
+                p.px = lNode.px;
+                p.py = lNode.py;
             }
 
-            // build big nodes
-            for (var i in places) {
-                ret.push(clone(places[i]));
-                if(places[i].info.rating !== undefined)
-                    ret[ret.length - 1].radius = (places[i].rating)*(places[i].rating)*(places[i].rating)/1.2;
-                else
-                    ret[ret.length - 1].radius = 10;
-                if(ret[ret.length - 1].radius < 10)
-                    ret[ret.length - 1].radius = 10;
-                ret[ret.length - 1].radius = parseInt(ret[ret.length -1].radius);
-                ret[ret.length - 1].fixed = false;
-                ret[ret.length - 1].color = color();
-            }
         }
-		return ret;
+
+        var ret = Array();
+
+        // build small nodes
+        for (var i in places)
+            ret.push(createSmallNode(places[i]));
+
+        // build big nodes
+        for (var i in places) 
+            ret.push(createLargeNode(places[i]));
+        
+        // fix the px when zooming
+        for (var i = 0 ; i < ret.length/2 ; i+=1)
+            laglng2px(ret[i]);
+
+        return ret;
     }
 
     // use _places to build edges
-    var createEdges = function (places) {
+    var createEdges = function (nodes) {
         ret = [];
-        var size = places.length;
-        for (var i in places) {
-            var source = Number(i)+Number(size);
-            ret.push({ "target" : Number(i) ,
+        for (var i  = 0 ; i < nodes.length/2 ; i+=1) {
+            var source = i+nodes.length/2;
+            ret.push({ "target" : i ,
                        "source" : source});
         }
-		return ret;
+        return ret;
     }
 
     this.onClickNode = function (callback) {
@@ -99,8 +143,7 @@ function PlaceLayer(map) {
 
     // when initial to map
     this.onAdd = function() {
-		console.log("on add");
-		_projection = this.getProjection();
+        _projection = this.getProjection();
         _overlayLayer = d3.select(this.getPanes().overlayMouseTarget)
                  .append("div")
                  .attr('class', 'layer')
@@ -124,9 +167,9 @@ function PlaceLayer(map) {
 
     // redraw the nodes and edges
     this.updateData = function (nodes , edges) {
-	
+    
         // setting force layout
-		var tick = 0;
+        var tick = 0;
         this.force = d3.layout.force()
             .gravity(0)
             .charge(-20)
@@ -134,24 +177,24 @@ function PlaceLayer(map) {
             .links(edges)
             .size([this.getPanes().overlayLayer.scrollWidth, this.getPanes().overlayLayer.scrollHeight])
             .linkDistance(this.getPanes().overlayLayer.scrollWidth/15)
-			.on('tick', function (e) {
-				// prevent overlaped nodes
+            .on('tick', function (e) {
+                // prevent overlaped nodes
                 
-				var q = d3.geom.quadtree(nodes);
-				for(var i = nodes.length/2 ;i < nodes.length ; i++) {
-					q.visit(collide(nodes[i]));
-				}
-				// redering nodes
-				if(tick++%1==0 && tick > 2) {
-					_selectionNode.each(nodeTransition);
-					_selectionEdge.each(edgeTransition);
-				}
-		});
-			
+                var q = d3.geom.quadtree(nodes);
+                for(var i = nodes.length/2 ;i < nodes.length ; i++) {
+                    q.visit(collide(nodes[i]));
+                }
+                // redering nodes
+                if(tick++%1==0 && tick > 2) {
+                    _selectionNode.each(nodeTransition);
+                    _selectionEdge.each(edgeTransition);
+                }
+        });
+            
         // update exist edges
         _selectionEdge = _overlayLayer
             .selectAll('.edge')
-			.attr('class', 'edge')
+            .attr('class', 'edge')
             .data(edges)
             .each(edgeTransition);
 
@@ -168,7 +211,7 @@ function PlaceLayer(map) {
             .attr('class', 'node')
             .attr('id', function(d){return "d" +d.info.id;})
             .each(nodeInitialTransition);
-			
+            
         var startX,startY;
         dragEvent= d3.behavior.drag()//this.force.drag()
             .on("dragstart", dragstart)
@@ -339,7 +382,7 @@ function PlaceLayer(map) {
 
     // prevent overlap nodes
     function collide(node) {
-      var r = node.radius + 16,
+      var r = node.radius + 20,
           nx1 = node.x - r,
           nx2 = node.x + r,
           ny1 = node.y - r,
@@ -362,42 +405,6 @@ function PlaceLayer(map) {
       };
     }
 
-    // instead of pointer assignment, this function can clone an object
-    function clone(obj) {
-        var copy;
-
-        // Handle the 3 simple types, and null or undefined
-        if (null == obj || "object" != typeof obj) return obj;
-
-        // Handle Date
-        if (obj instanceof Date) {
-            copy = new Date();
-            copy.setTime(obj.getTime());
-            return copy;
-        }
-
-        // Handle Array
-        if (obj instanceof Array) {
-            copy = [];
-            for (var i = 0, len = obj.length; i < len; i++) {
-                copy[i] = clone(obj[i]);
-            }
-            return copy;
-        }
-
-        // Handle Object
-        if (obj instanceof Object) {
-            copy = {};
-            for (var attr in obj) {
-                if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
-            }
-            return copy;
-        }
-
-        throw new Error("Unable to copy obj! Its type isn't supported.");
-    };
-
-
     function color () {
         var alpha = 0.9;
         var beautifulColor = ["rgba(11, 221, 24,0.9)","rgba(29, 98, 240 , 0.9)","rgba(255, 42, 104, 0.9)","rgba(255,205,2,0.9)"];
@@ -410,17 +417,17 @@ function PlaceLayer(map) {
               return check;
     }
 
-	var startX = null,startY = null;
+    var startX = null,startY = null;
 
-	function dragstart(d , i) {
+    function dragstart(d , i) {
         _obj.force.stop();
         var arr = [0,0];
         arr = d3.mouse(this);
         startX=arr[0];
         startY=arr[1];
-	}
+    }
 
-	function drag(d) {
+    function drag(d) {
         var arr = [0,0];
         arr = d3.mouse(this);
         if(d.radius != 5)
@@ -436,17 +443,17 @@ function PlaceLayer(map) {
         
 
         var length=(Math.abs(arr[0]-startX)+Math.abs(arr[1]-startY));
-		var like = (d.x > _projection.fromLatLngToDivPixel(map.getCenter()).x);
+        var like = (d.x > _projection.fromLatLngToDivPixel(map.getCenter()).x);
         console.log(length);
-		//_obj.force.start();
-		console.log("center: " + _projection.fromLatLngToDivPixel(map.getCenter()).x);
+        //_obj.force.start();
+        console.log("center: " + _projection.fromLatLngToDivPixel(map.getCenter()).x);
 
-		// show or not
-		var visibility = (length > 300)?"visible":"hidden";
+        // show or not
+        var visibility = (length > 300)?"visible":"hidden";
 
 
-		d3.select("#likeDIV").style("visibility",visibility);  
-		d3.select("#dislikeDIV").style("visibility",visibility);
+        d3.select("#likeDIV").style("visibility",visibility);  
+        d3.select("#dislikeDIV").style("visibility",visibility);
 
         if(like) {
             d3.select("#likeIMG").style("animation-play-state","running"); 
@@ -460,9 +467,9 @@ function PlaceLayer(map) {
             d3.select("#likeDIV").style("opacity","0.7");
             d3.select("#dislikeDIV").style("opacity","1");
         }                
-	}
+    }
 
-	function dragend(d) {
+    function dragend(d) {
         length=(Math.abs(d.x-startX)+Math.abs(d.y-startY));
 
         d3.select("#likeDIV").style("visibility","hidden");  
@@ -484,6 +491,6 @@ function PlaceLayer(map) {
             .style("top",  d.y + "px");
         _selectionEdge.each(edgeTransition);
         _obj.force.resume();
-	}
+    }
 
 }
