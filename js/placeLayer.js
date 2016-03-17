@@ -19,7 +19,7 @@ function PlaceLayer(map) {
     var _onClickNode;
 
     // modify _places according to old place index and new places
-    this.showPlace = function (oldPlaceIdx, newPlaces) {
+    this.showPlace = function (newPlaces) {
 
         // add newPlaces[i].x and newPlaces[i].y
         convertLatLng(newPlaces);
