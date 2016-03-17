@@ -190,7 +190,7 @@ function PlaceRefresh(googleMap , googlePlace){
             'dataType' : 'jsonp',
             'jsonpCallback' : 'cb',
             'success' : function(data, textStats, XMLHttpRequest) {
-                console.log(data);
+                //console.log(data);
                 yelpUpdatePlace(data , textStats);
             }
         });
