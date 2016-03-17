@@ -53,7 +53,9 @@ function PlaceLayer(map) {
             info: place.info,
             radius: parseInt((place.rating)*(place.rating)*(place.rating)/1.2),
             fixed: false,
-            color: color()
+            color: color(),
+            x : place.x,
+            y : place.y
         };
         if(undefined === ret.radius || ret.radius < 10)
             ret.radius = 10;
@@ -75,12 +77,12 @@ function PlaceLayer(map) {
     }
 
     // modify _places according to old place index and new places
-    this.showPlace = function (oldPlaceIdx, newPlaces) {
+    this.showPlace = function (places) {
 
         // add newPlaces[i].x and newPlaces[i].y
-        convertLatLng(newPlaces);
+        convertLatLng(places);
 
-        var nodes = createNodes(newPlaces);
+        var nodes = createNodes(places);
         var edges = createEdges(nodes);
 		
 		this.updateData(nodes , edges);
@@ -92,70 +94,35 @@ function PlaceLayer(map) {
         if(_selectionNode !== undefined)
         {
             var nodes = _selectionNode.data();
-            for (var i = 0 ; i < places.length ; i += 1)
-            {
-                //console.log("#d" + places[i].info.id);
-                var nd = d3.select("#d" + places[i].info.id);
-                //console.log(nd.data());
-                if(nd[0][0] === null)
-                {
-                    nodes.splice(nodes.length/2, 0, createSmallNode(places[i]));
-                    nodes.push(createLargeNode(places[i]));
-                }
-            }
 
             for (var i = 0 ; i < nodes.length/2 ; i+=1)
             {
-                if(checkInbound(nodes[i]) === false)
-                { 
-                    nodes.splice(i+nodes.length/2, 1);
-                    nodes.splice(i, 1);
-                    i-=1;
-                }
-            }
-            var sortList = [];
-            for (var i = 0 ; i < nodes.length/2 ; i+=1)
-                sortList[i] = i;
-            sortList.sort(function(a,b){
-                var ret =  parseFloat(- nodes[a].info.rating) + parseFloat(nodes[b].info.rating);
-                if(ret === 0)
-                    ret = parseInt( - nodes[a].info.review_count + nodes[b].info.review_count );
-                return ret;
-            });
-            
-            var deleteList = [];
-            while (sortList.length > 20)
-                deleteList.push(sortList.pop());
-
-            deleteList.sort(function(a,b){return a-b});
-            console.log(deleteList);
-
-            while (deleteList.length != 0)
-            {
-                var eraseID = deleteList.pop();
-                nodes.splice(eraseID+nodes.length/2, 1);
-                nodes.splice(eraseID, 1);
+                var lNode = nodes[i + nodes.length/2];
+                var p = places.find(function(p){return p.info.name == lNode.info.name;});
+                if(p === undefined)
+                    continue;
+                p.x = lNode.x;
+                p.y = lNode.y;
+                p.px = lNode.px;
+                p.py = lNode.py;
             }
 
-            console.log(nodes);
-
-            for (var i = 0 ; i < nodes.length/2 ; i+=1)
-            {
-                laglng2px(nodes[i]);
-            }
-            return nodes;
         }
+
         var ret = Array();
-        {
-            // build small nodes
-            for (var i in places)
-                ret.push(createSmallNode(places[i]));
 
-            // build big nodes
-            for (var i in places) {
-                ret.push(createLargeNode(places[i]));
-            }
-        }
+        // build small nodes
+        for (var i in places)
+            ret.push(createSmallNode(places[i]));
+
+        // build big nodes
+        for (var i in places) 
+            ret.push(createLargeNode(places[i]));
+        
+        // fix the px when zooming
+        for (var i = 0 ; i < ret.length/2 ; i+=1)
+            laglng2px(ret[i]);
+
 		return ret;
     }
 
@@ -415,7 +382,7 @@ function PlaceLayer(map) {
 
     // prevent overlap nodes
     function collide(node) {
-      var r = node.radius + 16,
+      var r = node.radius + 20,
           nx1 = node.x - r,
           nx2 = node.x + r,
           ny1 = node.y - r,

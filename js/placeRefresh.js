@@ -24,6 +24,7 @@ function PlaceRefresh(googleMap , googlePlace){
 
     // _callbackDetial function will be call whenever the detial of place are searched
     this.onAddPlaceDetial = function(place , callback) {
+        /*
       if(place.google_id !== undefined) {
         googlePlace.getDetails({"placeId":place.google_id} , function(results , status){
           if (status !== google.maps.places.PlacesServiceStatus.OK) {
@@ -36,8 +37,8 @@ function PlaceRefresh(googleMap , googlePlace){
           map.controls[google.maps.ControlPosition.RIGHT_CENTER].clear();
           map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(centerControlDiv);
         });
-      }
-      else if(place.yelp_id !== undefined) {
+      }*/
+      /*else if(place.yelp_id !== undefined)*/ {
         var auth = {
             //
             // Update with your auth tokens.
@@ -65,7 +66,7 @@ function PlaceRefresh(googleMap , googlePlace){
         parameters.push(['oauth_signature_method', 'HMAC-SHA1']);
 
         var message = {
-            'action' : 'http://api.yelp.com/v2/business/' + encodeURIComponent(place.yelp_id),
+            'action' : 'http://api.yelp.com/v2/business/' + encodeURIComponent(place.info.id),
             'method' : 'GET',
             'parameters' : parameters
         };

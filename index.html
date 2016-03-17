@@ -19,6 +19,8 @@
     <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
 
     <script async type="text/javascript" src="./js/placeRefresh.js"></script>
+    <script async type="text/javascript" src="./js/placeMerge.js"></script>
+    <script async type="text/javascript" src="./js/parkingMarkers.js"></script>
     <script async type="text/javascript" src="./js/panel.js"></script>
     <script async type="text/javascript" src="./js/placeLayer.js"></script>
     <script async type="text/javascript" src="./js/searchBox.js"></script>
@@ -35,23 +37,24 @@
         <div style="float:left; width:60%">
           <h2 class="project-tagline">帶您快速瞭解在地美食，不讓您的肚子留下遺憾！</h2>
         </div>
-      </section>
-      <div id="guideDIV" >
-       
-        <div class="googleDIV">
-          <section class="main-content"><!--section-->
-            <input id="place-input" class="controls" type="text" placeholder="去哪食？">
-            <input id="food-input"  class="controls" type="text" placeholder="食什麼？">
-            <div id="map-canvas"></div>
-          </section>
-        </div>
-        <div id="likeDIV">
-          <img id="likeIMG" src="./img/custom_like_button.png"/>
-        </div>
-        <div id="dislikeDIV">
-          <img id="dislikeIMG" src="./img/custom_dislike_button.png"/>
-        </div>       
+      </section> 
+
+      
+      <div class="googleDIV">
+        <section class="main-content"><!--section-->
+          <div id="map-canvas"></div>
+        </section>
       </div>
+      <div id="likeDIV">
+        <img id="likeIMG" src="./img/custom_like_button.png"/>
+      </div>
+      <div id="dislikeDIV">
+        <img id="dislikeIMG" src="./img/custom_dislike_button.png"/>
+      </div>       
+      
+      <section class="main-left"> <!--section-->
+        <input id="place" class="controls" type="text" placeholder="Where to eat ?">
+      </section>
   </body>
 
   <script>
@@ -96,21 +99,14 @@
       foodRefresh.NEARBY_SEARCH = "yelp";
       var parkingRefresh = new PlaceRefresh(map, placeService);
       parkingRefresh.NEARBY_SEARCH = "google";
+      var foodMerge = new PlaceMerge(map);
+      foodMerge.setMaxLength(20);
 
       // Create the place search box and link it to the UI element.
-      var placeInput = document.getElementById('place-input');
+      var placeInput = document.getElementById('place');
       var searchBox = new google.maps.places.SearchBox(placeInput);
-      map.controls[google.maps.ControlPosition.TOP_LEFT].push(placeInput);
       searchBoxInit(searchBox);
 
-      // Create the food search box and link it to the UI element.
-      var foodInput = document.getElementById('food-input');
-      map.controls[google.maps.ControlPosition.TOP_LEFT].push(foodInput);
-      foodRefresh.setKeywordSearchBox(foodInput);
-      foodInput.addEventListener("keydown", function (event) {
-          if(event.keyCode == 13)
-              foodRefresh.nearbySearch();
-      });
       
 
       // place layer setup
@@ -125,67 +121,15 @@
       foodRefresh.onUpdatePlaces(function(oldPlaceIdx , newPlaces){
 
         // update layout
-        placeLayer.showPlace(oldPlaceIdx, newPlaces);
-		placeLayer.force.start();
+        var mergedPlaces = foodMerge.merge(newPlaces);
+        placeLayer.showPlace(mergedPlaces);
+		    placeLayer.force.start();
       });
         
       var markers = [];
       var infowindows = [];
       parkingRefresh.onUpdatePlaces(function(oldPlaceIdx, newPlaces){
-        
-        var image = {
-          url: 'img/parking.jpg',
-          // This marker is 20 pixels wide by 32 pixels high.
-          //size: new google.maps.Size(20, 32),
-          // The origin for this image is (0, 0).
-          origin: new google.maps.Point(0, 0)
-          // The anchor for this image is the base of the flagpole at (0, 32).
-          //anchor: new google.maps.Point(10, 16)
-        };
-        var shape = {
-          coords: [0, 0, 50, 0, 50, 50, 0, 0],
-          type: 'poly'
-        };
-        // draw marker
-        for (var i = 0; i < markers.length; i++) {
-          markers[i].setMap(null);
-        }
-        markers = [];
-        for (var i = 0; i < newPlaces.length; i++) {
-          var place = newPlaces[i];
-          var marker = new google.maps.Marker({
-              position: {lat: place.lat, lng: place.lng},
-              map: map,
-              icon: image,
-              //shape: shape,
-              title: place.info.name,
-          });
-          markers.push(marker);
-        }
-        infowindows = [];
-        for (var i = 0; i < newPlaces.length; i++) {
-          var place = newPlaces[i];
-          var infowindow = new google.maps.InfoWindow({
-              content: place.info.name
-          });
-          infowindows.push(infowindow);
-        }
-        function addListener(marker, info)
-        {
-          marker.addListener('click', function() {
-              console.log(i)
-              console.log(infowindow);
-              infowindows[i].open(map, marker);
-          });
-        }
-        for (var key = 0; key < newPlaces.length; key++) {
-            google.maps.event.addListener(markers[key], 'click', function(innerKey) {
-                return function() {
-                    infowindows[innerKey].open(map, markers[innerKey]);
-                }
-            }(key));
-        }
-
+        parkingMarker(map, newPlaces);        
       });
       
       foodRefresh.onCenterControl(CenterControl);
