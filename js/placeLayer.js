@@ -18,6 +18,62 @@ function PlaceLayer(map) {
 	// a function call when click a node
     var _onClickNode;
 
+    function checkInbound(place)
+    {
+        if(place.info.location.coordinate.longitude === undefined)
+        {
+            console.log("**WARRN: lat and lng is undefined");
+            console.log(place);
+        return true;
+        }
+        var position = new google.maps.LatLng(place.info.location.coordinate.latitude, place.info.location.coordinate.longitude);
+        return map.getBounds().contains(position);
+    }
+    function laglng2px(place)
+    {
+        if(place.info.location.coordinate.longitude === undefined)
+        {
+            console.log("**WARRN: lat and lng is undefined");
+            console.log(place);
+            return true;
+        }
+        var position = new google.maps.LatLng(place.info.location.coordinate.latitude, place.info.location.coordinate.longitude);
+        var p = _projection.fromLatLngToDivPixel(position);
+        place.x = p.x;
+        place.y = p.y;
+        place.px = p.x;
+        place.py = p.y;
+
+        return map.getBounds().contains(position);
+    }
+
+    function createLargeNode(place)
+    {
+        var ret = {
+            info: place.info,
+            radius: parseInt((place.rating)*(place.rating)*(place.rating)/1.2),
+            fixed: false,
+            color: color()
+        };
+        if(undefined === ret.radius || ret.radius < 10)
+            ret.radius = 10;
+        return ret;
+    }
+
+    function createSmallNode(place)
+    {
+        var ret = {
+            info : place.info,
+            fixed : true,
+            radius : 5,
+            color : "#777777",
+            x : place.x,
+            y : place.y
+        };
+
+        return ret;
+    }
+
     // modify _places according to old place index and new places
     this.showPlace = function (oldPlaceIdx, newPlaces) {
 
@@ -25,7 +81,7 @@ function PlaceLayer(map) {
         convertLatLng(newPlaces);
 
         var nodes = createNodes(newPlaces);
-        var edges = createEdges(newPlaces);
+        var edges = createEdges(nodes);
 		
 		this.updateData(nodes , edges);
         _overlayLayer.style('visibility','visible');
@@ -35,59 +91,80 @@ function PlaceLayer(map) {
     var createNodes = function (places) {
         if(_selectionNode !== undefined)
         {
-            var addPlace = [];
-            var noRemovePlace = [];
             var nodes = _selectionNode.data();
             for (var i = 0 ; i < places.length ; i += 1)
             {
                 //console.log("#d" + places[i].info.id);
                 var nd = d3.select("#d" + places[i].info.id);
                 //console.log(nd.data());
-                if(nd[0][0] !== null)
+                if(nd[0][0] === null)
                 {
-                    addPlace.push(places[i]);
-                    var idx= nodes.indexOf(nd.data()[0]);
-                    noRemovePlace[idx] = true;
+                    nodes.splice(nodes.length/2, 0, createSmallNode(places[i]));
+                    nodes.push(createLargeNode(places[i]));
                 }
             }
-            //console.log(addPlace);
-            //console.log(noRemovePlace);
 
-        }
-        {
-            ret = [];
-            // build small nodes
-            for (var i in places) {
-                ret.push(clone(places[i]));
-                ret[ret.length - 1].fixed = true;
-                ret[ret.length - 1].radius = 5;
-                ret[ret.length - 1].color = "#777777";
+            for (var i = 0 ; i < nodes.length/2 ; i+=1)
+            {
+                if(checkInbound(nodes[i]) === false)
+                { 
+                    nodes.splice(i+nodes.length/2, 1);
+                    nodes.splice(i, 1);
+                    i-=1;
+                }
             }
+            var sortList = [];
+            for (var i = 0 ; i < nodes.length/2 ; i+=1)
+                sortList[i] = i;
+            sortList.sort(function(a,b){
+                var ret =  parseFloat(- nodes[a].info.rating) + parseFloat(nodes[b].info.rating);
+                if(ret === 0)
+                    ret = parseInt( - nodes[a].info.review_count + nodes[b].info.review_count );
+                return ret;
+            });
+            
+            var deleteList = [];
+            while (sortList.length > 20)
+                deleteList.push(sortList.pop());
+
+            deleteList.sort(function(a,b){return a-b});
+            console.log(deleteList);
+
+            while (deleteList.length != 0)
+            {
+                var eraseID = deleteList.pop();
+                nodes.splice(eraseID+nodes.length/2, 1);
+                nodes.splice(eraseID, 1);
+            }
+
+            console.log(nodes);
+
+            for (var i = 0 ; i < nodes.length/2 ; i+=1)
+            {
+                laglng2px(nodes[i]);
+            }
+            return nodes;
+        }
+        var ret = Array();
+        {
+            // build small nodes
+            for (var i in places)
+                ret.push(createSmallNode(places[i]));
 
             // build big nodes
             for (var i in places) {
-                ret.push(clone(places[i]));
-                if(places[i].info.rating !== undefined)
-                    ret[ret.length - 1].radius = (places[i].rating)*(places[i].rating)*(places[i].rating)/1.2;
-                else
-                    ret[ret.length - 1].radius = 10;
-                if(ret[ret.length - 1].radius < 10)
-                    ret[ret.length - 1].radius = 10;
-                ret[ret.length - 1].radius = parseInt(ret[ret.length -1].radius);
-                ret[ret.length - 1].fixed = false;
-                ret[ret.length - 1].color = color();
+                ret.push(createLargeNode(places[i]));
             }
         }
 		return ret;
     }
 
     // use _places to build edges
-    var createEdges = function (places) {
+    var createEdges = function (nodes) {
         ret = [];
-        var size = places.length;
-        for (var i in places) {
-            var source = Number(i)+Number(size);
-            ret.push({ "target" : Number(i) ,
+        for (var i  = 0 ; i < nodes.length/2 ; i+=1) {
+            var source = i+nodes.length/2;
+            ret.push({ "target" : i ,
                        "source" : source});
         }
 		return ret;
@@ -99,7 +176,6 @@ function PlaceLayer(map) {
 
     // when initial to map
     this.onAdd = function() {
-		console.log("on add");
 		_projection = this.getProjection();
         _overlayLayer = d3.select(this.getPanes().overlayMouseTarget)
                  .append("div")
@@ -361,42 +437,6 @@ function PlaceLayer(map) {
         return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
       };
     }
-
-    // instead of pointer assignment, this function can clone an object
-    function clone(obj) {
-        var copy;
-
-        // Handle the 3 simple types, and null or undefined
-        if (null == obj || "object" != typeof obj) return obj;
-
-        // Handle Date
-        if (obj instanceof Date) {
-            copy = new Date();
-            copy.setTime(obj.getTime());
-            return copy;
-        }
-
-        // Handle Array
-        if (obj instanceof Array) {
-            copy = [];
-            for (var i = 0, len = obj.length; i < len; i++) {
-                copy[i] = clone(obj[i]);
-            }
-            return copy;
-        }
-
-        // Handle Object
-        if (obj instanceof Object) {
-            copy = {};
-            for (var attr in obj) {
-                if (obj.hasOwnProperty(attr)) copy[attr] = clone(obj[attr]);
-            }
-            return copy;
-        }
-
-        throw new Error("Unable to copy obj! Its type isn't supported.");
-    };
-
 
     function color () {
         var alpha = 0.9;

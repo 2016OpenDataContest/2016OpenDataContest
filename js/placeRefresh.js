@@ -24,8 +24,6 @@ function PlaceRefresh(googleMap , googlePlace){
 
     // _callbackDetial function will be call whenever the detial of place are searched
     this.onAddPlaceDetial = function(place , callback) {
-      console.log("add place detial");
-      console.log(place);
       if(place.google_id !== undefined) {
         googlePlace.getDetails({"placeId":place.google_id} , function(results , status){
           if (status !== google.maps.places.PlacesServiceStatus.OK) {
@@ -109,8 +107,6 @@ function PlaceRefresh(googleMap , googlePlace){
           request.keyword = _keywordSearchBox.value;
 
       googlePlace.nearbySearch(request, function (results) {
-          console.log("obtain parking info");
-          console.log(results);
           for (var i in results) {
             var newPlace = {
               google_id : results[i].place_id,
@@ -155,7 +151,7 @@ function PlaceRefresh(googleMap , googlePlace){
         var sw = bound.getSouthWest();
         var ne = bound.getNorthEast();
         var bounds = sw.lat() + ',' + sw.lng() + '|' + ne.lat() + ',' + ne.lng();
-        console.log(bounds);
+        //console.log(bounds);
 
         var accessor = {
             consumerSecret : auth.consumerSecret,
@@ -180,7 +176,7 @@ function PlaceRefresh(googleMap , googlePlace){
         OAuth.SignatureMethod.sign(message, accessor);
 
         var parameterMap = OAuth.getParameterMap(message.parameters);
-        console.log(parameterMap);
+        //console.log(parameterMap);
 
         $.ajax({
             'url' : message.action,
@@ -188,7 +184,7 @@ function PlaceRefresh(googleMap , googlePlace){
             'dataType' : 'jsonp',
             'jsonpCallback' : 'cb',
             'success' : function(data, textStats, XMLHttpRequest) {
-                console.log(data);
+                //console.log(data);
                 yelpUpdatePlace(data , textStats);
             }
         });
@@ -211,8 +207,6 @@ function PlaceRefresh(googleMap , googlePlace){
 
     // after nearby/radarSearch, unpdatePlace will be call to update _places
     var yelpUpdatePlace = function(results , status){
-
-      console.log(results);
 
 	  var oldPlaceIdx = [];
       // add places

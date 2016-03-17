@@ -126,15 +126,12 @@
 
         // update layout
         placeLayer.showPlace(oldPlaceIdx, newPlaces);
-        console.log(newPlaces);
 		placeLayer.force.start();
       });
         
       var markers = [];
       var infowindows = [];
       parkingRefresh.onUpdatePlaces(function(oldPlaceIdx, newPlaces){
-        console.log("parking");
-        console.log(newPlaces);
         
         var image = {
           url: 'img/parking.jpg',
@@ -205,8 +202,8 @@
         google.maps.event.addListenerOnce(map, "idle", function () {
           searchBox.setBounds(map.getBounds());
           foodRefresh.nearbySearch();
-          });
-        parkingRefresh.nearbySearch(['parking']);
+          parkingRefresh.nearbySearch(['parking']);
+        });
       });
 
       // event listener when view change
