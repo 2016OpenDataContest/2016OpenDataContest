@@ -4,10 +4,13 @@ function PlaceMerge(map)
     var _maxLength = 10000;
 
     var _places = [];
-
+    
+    _obj.resetPlaces = function() {
+        _places = [];
+    }
     _obj.setMaxLength = function(l)
     {
-        _maxLength = l
+        _maxLength = l;
     }
 
     function existPlace(p)
@@ -54,7 +57,7 @@ function PlaceMerge(map)
         
         // create deleteList, which contains the place ID we would like to delete
         var deleteList = [];
-        while (sortList.length > 20)
+        while (sortList.length > _maxLength)
             deleteList.push(sortList.pop());
         
         // we should delete from the largest one to prevent the place IDs shifting

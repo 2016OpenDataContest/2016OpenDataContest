@@ -136,7 +136,7 @@ function PlaceRefresh(googleMap , googlePlace){
     }
 
     // nearbySearch will search 20 places in the view
-    this.yelpNearbySearch = function(tag) {
+    this.yelpNearbySearch = function() {
         var auth = {
             //
             // Update with your auth tokens.
@@ -172,18 +172,17 @@ function PlaceRefresh(googleMap , googlePlace){
         parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
         parameters.push(['oauth_token', auth.accessToken]);
         parameters.push(['oauth_signature_method', 'HMAC-SHA1']);
-        console.log(parameters);
+        //console.log(parameters);
         var message = {
             'action' : 'http://api.yelp.com/v2/search',
             'method' : 'GET',
             'parameters' : parameters
         };
-
         OAuth.setTimestampAndNonce(message);
         OAuth.SignatureMethod.sign(message, accessor);
 
         var parameterMap = OAuth.getParameterMap(message.parameters);
-        //console.log(parameterMap);
+        console.log(parameterMap);
 
         $.ajax({
             'url' : message.action,
@@ -191,7 +190,7 @@ function PlaceRefresh(googleMap , googlePlace){
             'dataType' : 'jsonp',
             'jsonpCallback' : 'cb',
             'success' : function(data, textStats, XMLHttpRequest) {
-                //console.log(data);
+                console.log(data);
                 yelpUpdatePlace(data , textStats);
             }
         });
