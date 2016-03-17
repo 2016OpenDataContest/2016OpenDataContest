@@ -33,31 +33,51 @@ function PlaceLayer(map) {
     };
     // use _places to build nodes (both big and small)
     var createNodes = function (places) {
-		ret = [];
-		// build small nodes
-        for (var i in places) {
-            ret.push(clone(places[i]));
-            ret[ret.length - 1].fixed = true;
-            ret[ret.length - 1].radius = 5;
-			ret[ret.length - 1].color = "#777777";
-        }
+        if(_selectionNode !== undefined)
+        {
+            var addPlace = [];
+            var noRemovePlace = [];
+            var nodes = _selectionNode.data();
+            for (var i = 0 ; i < places.length ; i += 1)
+            {
+                //console.log("#d" + places[i].info.id);
+                var nd = d3.select("#d" + places[i].info.id);
+                //console.log(nd.data());
+                if(nd[0][0] !== null)
+                {
+                    addPlace.push(places[i]);
+                    var idx= nodes.indexOf(nd.data()[0]);
+                    noRemovePlace[idx] = true;
+                }
+            }
+            //console.log(addPlace);
+            //console.log(noRemovePlace);
 
-		// build big nodes
-        for (var i in places) {
-            ret.push(clone(places[i]));
-			if(places[i].info.rating !== undefined)
-				ret[ret.length - 1].radius = (places[i].rating)*(places[i].rating)*(places[i].rating)/1.2;
-			else
-				ret[ret.length - 1].radius = 10;
-			if(ret[ret.length - 1].radius < 10)
-				ret[ret.length - 1].radius = 10;
-            ret[ret.length - 1].radius = parseInt(ret[ret.length -1].radius);
-            ret[ret.length - 1].fixed = false;
-			ret[ret.length - 1].color = color();
         }
-        console.log("my output");
-        console.log(ret);
-        console.log("output end");
+        {
+            ret = [];
+            // build small nodes
+            for (var i in places) {
+                ret.push(clone(places[i]));
+                ret[ret.length - 1].fixed = true;
+                ret[ret.length - 1].radius = 5;
+                ret[ret.length - 1].color = "#777777";
+            }
+
+            // build big nodes
+            for (var i in places) {
+                ret.push(clone(places[i]));
+                if(places[i].info.rating !== undefined)
+                    ret[ret.length - 1].radius = (places[i].rating)*(places[i].rating)*(places[i].rating)/1.2;
+                else
+                    ret[ret.length - 1].radius = 10;
+                if(ret[ret.length - 1].radius < 10)
+                    ret[ret.length - 1].radius = 10;
+                ret[ret.length - 1].radius = parseInt(ret[ret.length -1].radius);
+                ret[ret.length - 1].fixed = false;
+                ret[ret.length - 1].color = color();
+            }
+        }
 		return ret;
     }
 
@@ -146,6 +166,7 @@ function PlaceLayer(map) {
             .selectAll('.node')
             .data(nodes)
             .attr('class', 'node')
+            .attr('id', function(d){return "d" +d.info.id;})
             .each(nodeInitialTransition);
 			
         var startX,startY;
@@ -158,6 +179,7 @@ function PlaceLayer(map) {
         _selectionNode.enter()
             .append("div")
             .attr('class', 'node')
+            .attr('id', function(d){return "d" + d.info.id;})
             .each(nodeInitialTransition)
             .call(dragEvent)
             .on("mouseover",function(d){
