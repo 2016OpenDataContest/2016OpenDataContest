@@ -15,6 +15,7 @@
     <script async src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
     
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+
     <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
     <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
 
@@ -51,7 +52,29 @@
       </div>       
       
       <section class="main-left"> <!--section-->
-        <input id="place" class="controls" type="text" placeholder="Where to eat ?">
+        <br/>
+        <input id="place-input" class="controls" type="text" placeholder="Where to eat ?">
+        <br/>
+        <br/>
+        <fieldset>
+        <legend><label style="color: #FFFFFF"> Category </label></legend>
+        <div class="btn-group">
+        <input type="radio" name="selections" id="selection1" autocomplete="off" checked ><label style="color: #FFFFFF"> All</label>
+        <br/>
+        <input type="radio" name="selections" id="selection4" autocomplete="off"><label style="color: #FFFFFF"> American </label>
+        <br/>
+        <input type="radio" name="selections" id="selection5" autocomplete="off"><label style="color: #FFFFFF"> Asian </label>
+        <br/>
+        <input type="radio" name="selections" id="selection2" autocomplete="off" onclick=""><label style="color: #FFFFFF"> Breakfast & Brunch </label>
+        <br/>
+        <input type="radio" name="selections" id="selection6" autocomplete="off"><label style="color: #FFFFFF"> Buffets </label>
+        <br/>
+        <input type="radio" name="selections" id="selection7" autocomplete="off"><label style="color: #FFFFFF"> Chinese </label>
+        <br/>
+        <input type="radio" name="selections" id="selection8" autocomplete="off"><label style="color: #FFFFFF"> Cafes </label>
+        </div>
+        <input type="radio" name="selections" id="selection3" autocomplete="off"><label style="color: #FFFFFF"> Vegetarian </label>
+        </fieldset>
       </section>
   </body>
 
@@ -95,15 +118,48 @@
       var placeService = new google.maps.places.PlacesService(map);
       var foodRefresh = new PlaceRefresh(map, placeService);
       foodRefresh.NEARBY_SEARCH = "yelp";
+      foodRefresh.setCategory('');
       var parkingRefresh = new PlaceRefresh(map, placeService);
       parkingRefresh.NEARBY_SEARCH = "google";
 
       // Create the place search box and link it to the UI element.
-      var placeInput = document.getElementById('place');
+      var placeInput = document.getElementById('place-input');
       var searchBox = new google.maps.places.SearchBox(placeInput);
       searchBoxInit(searchBox);
-
       
+      // Give selection onclick function
+      document.getElementById('selection1').onclick = function() {
+        foodRefresh.setCategory('');
+        foodRefresh.nearbySearch();
+      };
+      document.getElementById('selection2').onclick = function() {
+        foodRefresh.setCategory('breakfast_brunch');
+        foodRefresh.nearbySearch();
+      };
+      document.getElementById('selection3').onclick = function() {
+        foodRefresh.setCategory('vegetarian');
+        foodRefresh.nearbySearch();
+      };
+      document.getElementById('selection4').onclick = function() {
+        foodRefresh.setCategory('tradamerican');
+        foodRefresh.nearbySearch();
+      };
+      document.getElementById('selection5').onclick = function() {
+        foodRefresh.setCategory('asianfusion');
+        foodRefresh.nearbySearch();
+      };
+      document.getElementById('selection6').onclick = function() {
+        foodRefresh.setCategory('buffets');
+        foodRefresh.nearbySearch();
+      };
+      document.getElementById('selection7').onclick = function() {
+        foodRefresh.setCategory('chinese');
+        foodRefresh.nearbySearch();
+      };
+      document.getElementById('selection8').onclick = function() {
+        foodRefresh.setCategory('cafes');
+        foodRefresh.nearbySearch();
+      };
 
       // place layer setup
       PlaceLayer.prototype = new google.maps.OverlayView();
@@ -187,7 +243,7 @@
 
       // event listener when initial view
       google.maps.event.addListenerOnce(map, 'bounds_changed', function () {
-        searchBox.setBounds(map.getBounds());
+        //searchBox.setBounds(map.getBounds());
         foodRefresh.nearbySearch();
         parkingRefresh.nearbySearch(['parking']);
       });
@@ -195,7 +251,7 @@
       // event listener when drag view
       google.maps.event.addListener(map, "dragstart", function(event){
         google.maps.event.addListenerOnce(map, "idle", function () {
-          searchBox.setBounds(map.getBounds());
+          //searchBox.setBounds(map.getBounds());
           foodRefresh.nearbySearch();
           });
         parkingRefresh.nearbySearch(['parking']);
@@ -203,7 +259,7 @@
 
       // event listener when view change
       google.maps.event.addListener(map, 'zoom_changed', function() {
-        searchBox.setBounds(map.getBounds());
+        //searchBox.setBounds(map.getBounds());
         foodRefresh.nearbySearch();
         parkingRefresh.nearbySearch(['parking']);
       });
