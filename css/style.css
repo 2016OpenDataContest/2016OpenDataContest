@@ -34,11 +34,20 @@ body {
 
 .main-content {
   position: absolute;
+  margin-left: 15%;
   padding: 0;
   margin-top: 0;
-  width: 100%;
+  width: 85%;
   max-width: none;
   height: 100%;
+}
+
+.main-left {
+  position: absolute;
+  width: 15%;
+  height: 100%;
+  background-color: #159957;
+  background-image: linear-gradient(180deg, #155799, #FFFFFF);
 }
 
 
@@ -48,14 +57,13 @@ body {
 
 }
 #guideDIV {
-  position: relative;
-  left:0; top:0;
+  position: absolute;
+  left:0; top:10%;
   width:  100%;
   height: 90%;
   visibility: visible;
-
-
 }
+
 .googleDIV {
   position: absolute;
   width:100%;  
@@ -281,7 +289,7 @@ html, body, #map-canvas {
   margin-left: 12px;
   padding: 0 11px 0 13px;
   text-overflow: ellipsis;
-  width: 300px;
+  width: 150px;
 }
 
 .controls:focus {

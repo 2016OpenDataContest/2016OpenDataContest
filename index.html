@@ -35,23 +35,24 @@
         <div style="float:left; width:60%">
           <h2 class="project-tagline">帶您快速瞭解在地美食，不讓您的肚子留下遺憾！</h2>
         </div>
-      </section>
-      <div id="guideDIV" >
-       
-        <div class="googleDIV">
-          <section class="main-content"><!--section-->
-            <input id="place-input" class="controls" type="text" placeholder="去哪食？">
-            <input id="food-input"  class="controls" type="text" placeholder="食什麼？">
-            <div id="map-canvas"></div>
-          </section>
-        </div>
-        <div id="likeDIV">
-          <img id="likeIMG" src="./img/custom_like_button.png"/>
-        </div>
-        <div id="dislikeDIV">
-          <img id="dislikeIMG" src="./img/custom_dislike_button.png"/>
-        </div>       
+      </section> 
+
+      
+      <div class="googleDIV">
+        <section class="main-content"><!--section-->
+          <div id="map-canvas"></div>
+        </section>
       </div>
+      <div id="likeDIV">
+        <img id="likeIMG" src="./img/custom_like_button.png"/>
+      </div>
+      <div id="dislikeDIV">
+        <img id="dislikeIMG" src="./img/custom_dislike_button.png"/>
+      </div>       
+      
+      <section class="main-left"> <!--section-->
+        <input id="place" class="controls" type="text" placeholder="去哪食？">
+      </section>
   </body>
 
   <script>
@@ -98,19 +99,10 @@
       parkingRefresh.NEARBY_SEARCH = "google";
 
       // Create the place search box and link it to the UI element.
-      var placeInput = document.getElementById('place-input');
+      var placeInput = document.getElementById('place');
       var searchBox = new google.maps.places.SearchBox(placeInput);
-      map.controls[google.maps.ControlPosition.TOP_LEFT].push(placeInput);
       searchBoxInit(searchBox);
 
-      // Create the food search box and link it to the UI element.
-      var foodInput = document.getElementById('food-input');
-      map.controls[google.maps.ControlPosition.TOP_LEFT].push(foodInput);
-      foodRefresh.setKeywordSearchBox(foodInput);
-      foodInput.addEventListener("keydown", function (event) {
-          if(event.keyCode == 13)
-              foodRefresh.nearbySearch();
-      });
       
 
       // place layer setup
@@ -127,7 +119,7 @@
         // update layout
         placeLayer.showPlace(oldPlaceIdx, newPlaces);
         console.log(newPlaces);
-		placeLayer.force.start();
+		    placeLayer.force.start();
       });
         
       var markers = [];
