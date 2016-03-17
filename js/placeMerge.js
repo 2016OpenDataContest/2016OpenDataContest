@@ -37,7 +37,7 @@ function PlaceMerge(map)
 
     function removeOutbounds()
     {
-        _places = _places.filter(checkInbound);
+        //_places = _places.filter(checkInbound); 
     }
 
     function removeOutLength()

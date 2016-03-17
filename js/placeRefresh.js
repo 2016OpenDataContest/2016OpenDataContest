@@ -182,7 +182,7 @@ function PlaceRefresh(googleMap , googlePlace){
         OAuth.SignatureMethod.sign(message, accessor);
 
         var parameterMap = OAuth.getParameterMap(message.parameters);
-        console.log(parameterMap);
+        //console.log(parameterMap);
 
         $.ajax({
             'url' : message.action,
