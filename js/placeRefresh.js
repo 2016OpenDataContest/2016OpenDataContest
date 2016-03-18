@@ -13,6 +13,11 @@ function PlaceRefresh(googleMap , googlePlace){
 
     var _callbackCenterControl;
 
+    var _category;
+    // set _catagory value
+    this.setCategory = function (c) {
+      _category = c;
+    }
     // _callbackPlaces function will be call whenever view of places are updated
     this.onUpdatePlaces = function (callback) {
       _callbackPlaces = callback;
@@ -75,7 +80,7 @@ function PlaceRefresh(googleMap , googlePlace){
         OAuth.SignatureMethod.sign(message, accessor);
 
         var parameterMap = OAuth.getParameterMap(message.parameters);
-        console.log(parameterMap);
+        //console.log(parameterMap);
 
         $.ajax({
             'url' : message.action,
@@ -160,19 +165,19 @@ function PlaceRefresh(googleMap , googlePlace){
         };
         parameters = [];
         parameters.push(['term', terms]);
+        parameters.push(['category_filter', _category]);
         parameters.push(['bounds', bounds]);
         parameters.push(['callback', 'cb']);
         parameters.push(['oauth_consumer_key', auth.consumerKey]);
         parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
         parameters.push(['oauth_token', auth.accessToken]);
         parameters.push(['oauth_signature_method', 'HMAC-SHA1']);
-
+        //console.log(parameters);
         var message = {
             'action' : 'http://api.yelp.com/v2/search',
             'method' : 'GET',
             'parameters' : parameters
         };
-
         OAuth.setTimestampAndNonce(message);
         OAuth.SignatureMethod.sign(message, accessor);
 
