@@ -5,7 +5,26 @@ function PlaceFilter(map)
     var _category;
     var _places = [];
     var _filter = [];
-
+    
+    _obj.returnTopFive = function() {
+        // sort the place ID according to rating and review_count
+        var sortList = [];
+        for (var i = 0 ; i < _places.length ; i+=1)
+            sortList[i] = i;
+        // sort
+        sortList.sort(function(a,b){
+            var ret =  parseFloat( - _places[a].info.rating) + parseFloat(_places[b].info.rating);
+            if(ret === 0)
+                ret = parseInt( - _places[a].info.review_count + _places[b].info.review_count );
+            return ret;
+        });
+        var topFiveList = [];
+        for (var i = 0; i < Math.min(_places.length, 5); i+=1)
+            topFiveList.push(_places[sortList[i]]);
+        //console.log(topFiveList);
+        return topFiveList;
+    }
+    
     _obj.resetFilter = function() {
       _filter = [];
     }

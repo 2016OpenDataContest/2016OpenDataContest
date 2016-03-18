@@ -60,41 +60,52 @@
         <br/>
         <br/>
         <fieldset>
-        <legend><label style="color: #FFFFFF"> Category </label></legend>
+        <legend><label style="color: #fcc800; font-size: 1.6rem; font-weight: bold; font-family: cursive;"> Category </label></legend>
         <div class="btn-group">
-        <input type="radio" name="selections" id="selection1" autocomplete="off" checked ><label style="color: #FFFFFF"> All</label>
+        <input type="radio" name="selections" id="selection1" autocomplete="off" checked ><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> All</label>
         <br/>
-        <input type="radio" name="selections" id="selection4" autocomplete="off"><label style="color: #FFFFFF"> American </label>
+        <input type="radio" name="selections" id="selection4" autocomplete="off"><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> American </label>
         <br/>
-        <input type="radio" name="selections" id="selection5" autocomplete="off"><label style="color: #FFFFFF"> Asian </label>
+        <input type="radio" name="selections" id="selection5" autocomplete="off"><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> Asian </label>
         <br/>
-        <input type="radio" name="selections" id="selection2" autocomplete="off" onclick=""><label style="color: #FFFFFF"> Breakfast & Brunch </label>
+        <input type="radio" name="selections" id="selection2" autocomplete="off" onclick=""><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> Breakfast & Brunch </label>
         <br/>
-        <input type="radio" name="selections" id="selection6" autocomplete="off"><label style="color: #FFFFFF"> Buffets </label>
+        <input type="radio" name="selections" id="selection6" autocomplete="off"><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> Buffets </label>
         <br/>
-        <input type="radio" name="selections" id="selection7" autocomplete="off"><label style="color: #FFFFFF"> Chinese </label>
+        <input type="radio" name="selections" id="selection7" autocomplete="off"><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> Chinese </label>
         <br/>
-        <input type="radio" name="selections" id="selection8" autocomplete="off"><label style="color: #FFFFFF"> Cafes </label>
+        <input type="radio" name="selections" id="selection8" autocomplete="off"><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> Cafes </label>
         </div>
-        <input type="radio" name="selections" id="selection3" autocomplete="off"><label style="color: #FFFFFF"> Vegetarian </label>
+        <input type="radio" name="selections" id="selection3" autocomplete="off"><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> Vegetarian </label>
         </fieldset>
         <br/>
+        <fieldset>
+        <legend><label style="color: #007b43; font-size: 1.6rem; font-weight: bold; font-family: cursive;"> Filter </label></legend>
+          <input type="checkbox" id="checkbox1" autocomplete="off" style="visibility: hidden" checked ><label style="color: #007b43; font-family: cursive;font-weight: bold;"></label>
+          <br/>
+          <input type="checkbox" id="checkbox2" autocomplete="off" style="visibility: hidden" checked ><label style="color: #007b43; font-family: cursive;font-weight: bold;"></label>
+          <br/>
+          <input type="checkbox" id="checkbox3" autocomplete="off" style="visibility: hidden" checked ><label style="color: #007b43; font-family: cursive;font-weight: bold;"></label>
+          <br/>
+          <input type="checkbox" id="checkbox4" autocomplete="off" style="visibility: hidden" checked ><label style="color: #007b43; font-family: cursive;font-weight: bold;"></label>
+          <br/>
+          <input type="checkbox" id="checkbox5" autocomplete="off" style="visibility: hidden" checked ><label style="color: #007b43; font-family: cursive;font-weight: bold;"></label>
+          <br/>
+          <input type="checkbox" id="checkbox6" autocomplete="off" style="visibility: hidden" checked ><label style="color: #007b43; font-family: cursive;font-weight: bold;"></label>
+          <br/>
+        </fieldset>
         <br/>
         <fieldset>
-        <legend><label style="color: #FFFFFF"> Filter </label></legend>
-          <input type="checkbox" id="checkbox1" autocomplete="off" style="visibility: hidden" checked ><label style="color: #FFFFFF"></label>
-          <br/>
-          <input type="checkbox" id="checkbox2" autocomplete="off" style="visibility: hidden" checked ><label style="color: #FFFFFF"></label>
-          <br/>
-          <input type="checkbox" id="checkbox3" autocomplete="off" style="visibility: hidden" checked ><label style="color: #FFFFFF"></label>
-          <br/>
-          <input type="checkbox" id="checkbox4" autocomplete="off" style="visibility: hidden" checked ><label style="color: #FFFFFF"></label>
-          <br/>
-          <input type="checkbox" id="checkbox5" autocomplete="off" style="visibility: hidden" checked ><label style="color: #FFFFFF"></label>
-          <br/>
-          <input type="checkbox" id="checkbox6" autocomplete="off" style="visibility: hidden" checked ><label style="color: #FFFFFF"></label>
-          <br/>
-        
+        <legend><label style="color: #c9171e; font-size: 1.6rem; font-weight: bold; font-family: cursive;"> Top 5 Restaurant </label></legend>
+        <label id = "award1" style="color: #c9171e; font-size: 1.2rem; font-weight: bold;font-family: cursive;"></label>
+        <br/>
+        <label id = "award2" style="color: #c9171e; font-size: 1.2rem; font-weight: bold;font-family: cursive;"></label>
+        <br/>
+        <label id = "award3" style="color: #c9171e; font-size: 1.2rem; font-weight: bold;font-family: cursive;"></label>
+        <br/>
+        <label id = "award4" style="color: #c9171e; font-size: 1.2rem; font-weight: bold;font-family: cursive;"></label>
+        <br/>
+        <label id = "award5" style="color: #c9171e; font-size: 1.2rem; font-weight: bold;font-family: cursive;"></label>
         </fieldset>
       </section>
   </body>
@@ -228,9 +239,9 @@
         var mergedPlaces = foodMerge.merge(newPlaces);
         
         var inBoundPlaces = foodFilter.findInBoundPlaces(mergedPlaces);
-        var typeList = foodFilter.summaryType(inBoundPlaces);
-        
+        var typeList = foodFilter.summaryType(inBoundPlaces); //This is sorted list 
         var numberOfCheckBox = 6; // how many checkbox 
+
         // update filter
         if (typeList.length > 0) {
             for (var i = 0; i < Math.min(typeList.length, numberOfCheckBox); i+=1) {
@@ -262,6 +273,20 @@
                   document.getElementById(checkboxIdx).nextSibling.innerHTML = '';
               }
         }
+        // print top 5
+        var topFive = foodFilter.returnTopFive();
+        var awardIdx;
+        console.log(topFive);
+        for(var i = 1; i <= 5; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = '';
+        }
+        for(var i = 1; i <= topFive.length; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = 
+          i + '. ' + topFive[i - 1].info.name;
+        }
+
         placeLayer.showPlace(mergedPlaces);
 		    placeLayer.force.start();
       });

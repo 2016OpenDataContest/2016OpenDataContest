@@ -34,17 +34,17 @@ body {
 
 .main-content {
   position: absolute;
-  margin-left: 15%;
+  margin-left: 20%;
   padding: 0;
   margin-top: 0;
-  width: 85%;
+  width: 80%;
   max-width: none;
   height: 100%;
 }
 
 .main-left {
   position: absolute;
-  width: 15%;
+  width: 20%;
   height: 100%;
   background-color: #159957;
   background-image: linear-gradient(180deg, #155799, #FFFFFF);
