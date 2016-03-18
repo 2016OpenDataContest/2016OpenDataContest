@@ -203,6 +203,15 @@
         foodRefresh.nearbySearch();
       };
 
+      //checkbox operation
+      document.getElementById('checkbox1').onclick = function() {
+        /*if(this.checked == true)
+          foodFilter.SetFilter(document.getElementById('checkbox1').nextSibling.innerHTML, true); //TODO
+        else
+          foodFilter.SetFilter(document.getElementById('checkbox1').nextSibling.innerHTML, false);
+        var fliterPlaces = foodFilter.returnPlaces(); //TODO
+        placeLayer.showPlace(filterPlaces);*/
+      };
       // place layer setup
       PlaceLayer.prototype = new google.maps.OverlayView();
       var placeLayer = null;
