@@ -21,6 +21,7 @@
 
     <script async type="text/javascript" src="./js/placeRefresh.js"></script>
     <script async type="text/javascript" src="./js/placeMerge.js"></script>
+    <script async type="text/javascript" src="./js/placeFilter.js"></script>
     <script async type="text/javascript" src="./js/parkingMarkers.js"></script>
     <script async type="text/javascript" src="./js/panel.js"></script>
     <script async type="text/javascript" src="./js/placeLayer.js"></script>
@@ -77,6 +78,24 @@
         </div>
         <input type="radio" name="selections" id="selection3" autocomplete="off"><label style="color: #FFFFFF"> Vegetarian </label>
         </fieldset>
+        <br/>
+        <br/>
+        <fieldset>
+        <legend><label style="color: #FFFFFF"> Filter </label></legend>
+          <input type="checkbox" id="checkbox1" autocomplete="off" style="visibility: hidden" checked ><label style="color: #FFFFFF"></label>
+          <br/>
+          <input type="checkbox" id="checkbox2" autocomplete="off" style="visibility: hidden" checked ><label style="color: #FFFFFF"></label>
+          <br/>
+          <input type="checkbox" id="checkbox3" autocomplete="off" style="visibility: hidden" checked ><label style="color: #FFFFFF"></label>
+          <br/>
+          <input type="checkbox" id="checkbox4" autocomplete="off" style="visibility: hidden" checked ><label style="color: #FFFFFF"></label>
+          <br/>
+          <input type="checkbox" id="checkbox5" autocomplete="off" style="visibility: hidden" checked ><label style="color: #FFFFFF"></label>
+          <br/>
+          <input type="checkbox" id="checkbox6" autocomplete="off" style="visibility: hidden" checked ><label style="color: #FFFFFF"></label>
+          <br/>
+        
+        </fieldset>
       </section>
   </body>
 
@@ -124,6 +143,7 @@
       var parkingRefresh = new PlaceRefresh(map, placeService);
       parkingRefresh.NEARBY_SEARCH = "google";
       var foodMerge = new PlaceMerge(map);
+      var foodFilter = new PlaceFilter(map);
       //foodMerge.setMaxLength(30);
 
       // Create the place search box and link it to the UI element.
@@ -134,41 +154,51 @@
       // Give selection onclick function
       document.getElementById('selection1').onclick = function() {
         foodMerge.resetPlaces();
+        foodFilter.setCategory('');
         foodRefresh.setCategory('');
         foodRefresh.nearbySearch();
       };
       document.getElementById('selection2').onclick = function() {
         foodMerge.resetPlaces();
+        foodFilter.setCategory('breakfast_brunch');
         foodRefresh.setCategory('breakfast_brunch');
         foodRefresh.nearbySearch();
+        //document.getElementById('checkbox1').setAttribute("style","visibility:hidden"); 
       };
       document.getElementById('selection3').onclick = function() {
         foodMerge.resetPlaces();
+        foodFilter.setCategory('vegetarian');
         foodRefresh.setCategory('vegetarian');
         foodRefresh.nearbySearch();
+        //document.getElementById('checkbox1').setAttribute("style","visibility:visible");
       };
       document.getElementById('selection4').onclick = function() {
         foodMerge.resetPlaces();
+        foodFilter.setCategory('tradamerican');
         foodRefresh.setCategory('tradamerican');
         foodRefresh.nearbySearch();
       };
       document.getElementById('selection5').onclick = function() {
         foodMerge.resetPlaces();
+        foodFilter.setCategory('asianfusion');
         foodRefresh.setCategory('asianfusion');
         foodRefresh.nearbySearch();
       };
       document.getElementById('selection6').onclick = function() {
         foodMerge.resetPlaces();
+        foodFilter.setCategory('buffets');
         foodRefresh.setCategory('buffets');
         foodRefresh.nearbySearch();
       };
       document.getElementById('selection7').onclick = function() {
         foodMerge.resetPlaces();
+        foodFilter.setCategory('chinese');
         foodRefresh.setCategory('chinese');
         foodRefresh.nearbySearch();
       };
       document.getElementById('selection8').onclick = function() {
         foodMerge.resetPlaces();
+        foodFilter.setCategory('cafes');
         foodRefresh.setCategory('cafes');
         foodRefresh.nearbySearch();
       };
@@ -186,6 +216,31 @@
 
         // update layout
         var mergedPlaces = foodMerge.merge(newPlaces);
+        
+        var inBoundPlaces = foodFilter.findInBoundPlaces(mergedPlaces);
+        var typeList = foodFilter.summaryType(inBoundPlaces);
+        
+        var numberOfCheckBox = 6; // how many checkbox 
+        // update filter
+        for (var i = 0; i < Math.min(typeList.length, numberOfCheckBox); i+=1) {
+           if (i < numberOfCheckBox - 1){
+               var checkboxIdx = 'checkbox' + (i + 1);
+               document.getElementById(checkboxIdx).setAttribute("style","visibility:visible");
+               document.getElementById(checkboxIdx).checked = true; 
+               document.getElementById(checkboxIdx).nextSibling.innerHTML = ' ' + typeList[i][0];
+           } else {
+               var checkboxIdx = 'checkbox' + (i + 1);
+               document.getElementById(checkboxIdx).setAttribute("style","visibility:visible");
+               document.getElementById(checkboxIdx).checked = true;  
+               document.getElementById(checkboxIdx).nextSibling.innerHTML = ' others';
+           }
+        }
+        if (typeList.length < numberOfCheckBox) {
+              var checkboxIdx = 'checkbox' + (typeList.length + 1);
+               document.getElementById(checkboxIdx).setAttribute("style","visibility:visible");
+               document.getElementById(checkboxIdx).checked = true;  
+               document.getElementById(checkboxIdx).nextSibling.innerHTML = ' others';
+        }
         placeLayer.showPlace(mergedPlaces);
 		    placeLayer.force.start();
       });
