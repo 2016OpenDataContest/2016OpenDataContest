@@ -4,8 +4,20 @@ function PlaceFilter(map)
     var _maxLength = 10000;
     var _category;
     var _places = [];
-    
+    var _filter = [];
 
+    _obj.resetFilter = function() {
+      _filter = [];
+    }
+
+    _obj.setFilter = function(f, operation) {
+      if (operation == true) _filter.push(f);
+      else {
+        var Idx = _filter.indexOf(f);
+        _filter.splice(Idx, 1);
+      }
+      console.log(_filter);
+    }
     _obj.setCategory = function (c) {
       _category = c;
     }

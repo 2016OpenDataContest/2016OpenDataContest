@@ -205,12 +205,13 @@
 
       //checkbox operation
       document.getElementById('checkbox1').onclick = function() {
-        /*if(this.checked == true)
-          foodFilter.SetFilter(document.getElementById('checkbox1').nextSibling.innerHTML, true); //TODO
+        var filterCategory = document.getElementById('checkbox1').nextSibling.innerHTML.replace(' ','');
+        if(this.checked == true)
+          foodFilter.setFilter(filterCategory, false);
         else
-          foodFilter.SetFilter(document.getElementById('checkbox1').nextSibling.innerHTML, false);
-        var fliterPlaces = foodFilter.returnPlaces(); //TODO
-        placeLayer.showPlace(filterPlaces);*/
+          foodFilter.setFilter(filterCategory, true);
+        //var fliterPlaces = foodFilter.returnPlaces(); //TODO
+        //placeLayer.showPlace(filterPlaces);
       };
       // place layer setup
       PlaceLayer.prototype = new google.maps.OverlayView();
@@ -248,14 +249,14 @@
         }
         if (typeList.length < numberOfCheckBox) {
               var checkboxIdx = 'checkbox' + (typeList.length + 1);
-              document.getElementById(checkboxIdx).setAttribute("style","visibility:visible");
+              /*document.getElementById(checkboxIdx).setAttribute("style","visibility:visible");
               document.getElementById(checkboxIdx).checked = true;
               if (typeList.length > 0)  
                   document.getElementById(checkboxIdx).nextSibling.innerHTML = ' Others';
               else
-                  document.getElementById(checkboxIdx).nextSibling.innerHTML = ' All';
-              for (var i = typeList.length + 1; i < numberOfCheckBox; i+=1) {
-                  checkboxIdx = 'checkbox' + (i + 1);
+                  document.getElementById(checkboxIdx).nextSibling.innerHTML = ' All';*/
+              for (var i = typeList.length + 1; i <= numberOfCheckBox; i+=1) {
+                  checkboxIdx = 'checkbox' + i;
                   document.getElementById(checkboxIdx).setAttribute("style","visibility:hidden");
                   document.getElementById(checkboxIdx).checked = true;  
                   document.getElementById(checkboxIdx).nextSibling.innerHTML = '';
