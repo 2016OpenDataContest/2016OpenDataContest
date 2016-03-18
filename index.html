@@ -225,6 +225,17 @@
         var fliterPlaces = foodFilter.returnPlaces();
         placeLayer.showPlace(fliterPlaces);
         placeLayer.force.start();
+        var topFive = foodFilter.returnTopFive();
+        var awardIdx;
+        for(var i = 1; i <= 5; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = '';
+        }
+        for(var i = 1; i <= topFive.length; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = 
+          i + '. ' + topFive[i - 1].info.name;
+        }
       };
       document.getElementById('checkbox2').onclick = function() {
         var filterCategory = document.getElementById('checkbox2').nextSibling.innerHTML.replace(' ','');
@@ -237,6 +248,17 @@
         var fliterPlaces = foodFilter.returnPlaces();
         placeLayer.showPlace(fliterPlaces);
         placeLayer.force.start();
+        var topFive = foodFilter.returnTopFive();
+        var awardIdx;
+        for(var i = 1; i <= 5; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = '';
+        }
+        for(var i = 1; i <= topFive.length; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = 
+          i + '. ' + topFive[i - 1].info.name;
+        }
       };
       document.getElementById('checkbox3').onclick = function() {
         var filterCategory = document.getElementById('checkbox3').nextSibling.innerHTML.replace(' ','');
@@ -248,6 +270,17 @@
         var fliterPlaces = foodFilter.returnPlaces();
         placeLayer.showPlace(fliterPlaces);
         placeLayer.force.start();
+        var topFive = foodFilter.returnTopFive();
+        var awardIdx;
+        for(var i = 1; i <= 5; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = '';
+        }
+        for(var i = 1; i <= topFive.length; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = 
+          i + '. ' + topFive[i - 1].info.name;
+        }
       };
       document.getElementById('checkbox4').onclick = function() {
         var filterCategory = document.getElementById('checkbox4').nextSibling.innerHTML.replace(' ','');
@@ -259,6 +292,17 @@
         var fliterPlaces = foodFilter.returnPlaces();
         placeLayer.showPlace(fliterPlaces);
         placeLayer.force.start();
+        var topFive = foodFilter.returnTopFive();
+        var awardIdx;
+        for(var i = 1; i <= 5; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = '';
+        }
+        for(var i = 1; i <= topFive.length; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = 
+          i + '. ' + topFive[i - 1].info.name;
+        }
       };
       document.getElementById('checkbox5').onclick = function() {
         var filterCategory = document.getElementById('checkbox5').nextSibling.innerHTML.replace(' ','');
@@ -270,6 +314,17 @@
         var fliterPlaces = foodFilter.returnPlaces();
         placeLayer.showPlace(fliterPlaces);
         placeLayer.force.start();
+        var topFive = foodFilter.returnTopFive();
+        var awardIdx;
+        for(var i = 1; i <= 5; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = '';
+        }
+        for(var i = 1; i <= topFive.length; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = 
+          i + '. ' + topFive[i - 1].info.name;
+        }
       };
       document.getElementById('checkbox6').onclick = function() {
         var filterCategory = document.getElementById('checkbox6').nextSibling.innerHTML.replace(' ','');
@@ -281,6 +336,17 @@
         var fliterPlaces = foodFilter.returnPlaces();
         placeLayer.showPlace(fliterPlaces);
         placeLayer.force.start();
+        var topFive = foodFilter.returnTopFive();
+        var awardIdx;
+        for(var i = 1; i <= 5; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = '';
+        }
+        for(var i = 1; i <= topFive.length; i+=1) {
+          awardIdx = 'award' + i;
+          document.getElementById(awardIdx).innerText = 
+          i + '. ' + topFive[i - 1].info.name;
+        }
       };
       // place layer setup
       PlaceLayer.prototype = new google.maps.OverlayView();

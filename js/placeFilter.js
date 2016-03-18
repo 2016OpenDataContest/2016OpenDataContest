@@ -11,19 +11,19 @@ function PlaceFilter(map)
     _obj.returnTopFive = function() {
         // sort the place ID according to rating and review_count
         var sortList = [];
-        for (var i = 0 ; i < _places.length ; i+=1)
+        for (var i = 0 ; i < _filterplaces.length ; i+=1)
             sortList[i] = i;
         // sort
         sortList.sort(function(a,b){
-            var ret =  parseFloat( - _places[a].info.rating) + parseFloat(_places[b].info.rating);
+            var ret =  parseFloat( - _filterplaces[a].info.rating) + parseFloat(_filterplaces[b].info.rating);
             if(ret === 0)
-                ret = parseInt( - _places[a].info.review_count + _places[b].info.review_count );
+                ret = parseInt( - _filterplaces[a].info.review_count + _filterplaces[b].info.review_count );
             return ret;
         });
         var topFiveList = [];
-        for (var i = 0; i < Math.min(_places.length, 5); i+=1)
-            topFiveList.push(_places[sortList[i]]);
-        //console.log(topFiveList);
+        for (var i = 0; i < Math.min(_filterplaces.length, 5); i+=1)
+            topFiveList.push(_filterplaces[sortList[i]]);
+        console.log(topFiveList);
         return topFiveList;
     }
     
@@ -47,6 +47,7 @@ function PlaceFilter(map)
     _obj.findInBoundPlaces = function(p) {
         _places = p;
         removeOutbounds();
+        _filterplaces = _places;
         return _places;
     }
 
@@ -56,6 +57,7 @@ function PlaceFilter(map)
 
     _obj.summaryType = function(p) {
         _places = p;
+        //_filterplaces = _places; // maybe redundant
         var typeList = new Array();
         for (var i = 0; i < _places.length; i+=1) {
             for (var j = 0; j < _places[i].info.categories.length; j+=1) {
