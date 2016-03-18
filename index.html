@@ -72,7 +72,7 @@
       });
       //var styles = [{"featureType":"poi","stylers":[{visibility:"off"}]}];
       var styles = [{"featureType": "all","elementType": "all","stylers": [{"saturation": +50},{ "gamma": 0}]},{featureType: "poi",elementType: "labels",stylers: [{ visibility: "off" }]}];
-
+      styles = [{"stylers":[{"hue":"#FFDC35"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":100},{"visibility":"simplified"}]}];
       map.setOptions({styles: styles});
 
       // setting user location
