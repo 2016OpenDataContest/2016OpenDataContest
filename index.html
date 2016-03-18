@@ -217,12 +217,70 @@
       //checkbox operation
       document.getElementById('checkbox1').onclick = function() {
         var filterCategory = document.getElementById('checkbox1').nextSibling.innerHTML.replace(' ','');
+        filterCategory = filterCategory.replace('amp;','');
         if(this.checked == true)
           foodFilter.setFilter(filterCategory, false);
         else
           foodFilter.setFilter(filterCategory, true);
-        //var fliterPlaces = foodFilter.returnPlaces(); //TODO
-        //placeLayer.showPlace(filterPlaces);
+        var fliterPlaces = foodFilter.returnPlaces();
+        placeLayer.showPlace(fliterPlaces);
+        placeLayer.force.start();
+      };
+      document.getElementById('checkbox2').onclick = function() {
+        var filterCategory = document.getElementById('checkbox2').nextSibling.innerHTML.replace(' ','');
+        filterCategory = filterCategory.replace('amp;','');
+        console.log(filterCategory);
+        if(this.checked == true)
+          foodFilter.setFilter(filterCategory, false);
+        else
+          foodFilter.setFilter(filterCategory, true);
+        var fliterPlaces = foodFilter.returnPlaces();
+        placeLayer.showPlace(fliterPlaces);
+        placeLayer.force.start();
+      };
+      document.getElementById('checkbox3').onclick = function() {
+        var filterCategory = document.getElementById('checkbox3').nextSibling.innerHTML.replace(' ','');
+        filterCategory = filterCategory.replace('amp;','');
+        if(this.checked == true)
+          foodFilter.setFilter(filterCategory, false);
+        else
+          foodFilter.setFilter(filterCategory, true);
+        var fliterPlaces = foodFilter.returnPlaces();
+        placeLayer.showPlace(fliterPlaces);
+        placeLayer.force.start();
+      };
+      document.getElementById('checkbox4').onclick = function() {
+        var filterCategory = document.getElementById('checkbox4').nextSibling.innerHTML.replace(' ','');
+        filterCategory = filterCategory.replace('amp;','');
+        if(this.checked == true)
+          foodFilter.setFilter(filterCategory, false);
+        else
+          foodFilter.setFilter(filterCategory, true);
+        var fliterPlaces = foodFilter.returnPlaces();
+        placeLayer.showPlace(fliterPlaces);
+        placeLayer.force.start();
+      };
+      document.getElementById('checkbox5').onclick = function() {
+        var filterCategory = document.getElementById('checkbox5').nextSibling.innerHTML.replace(' ','');
+        filterCategory = filterCategory.replace('amp;','');
+        if(this.checked == true)
+          foodFilter.setFilter(filterCategory, false);
+        else
+          foodFilter.setFilter(filterCategory, true);
+        var fliterPlaces = foodFilter.returnPlaces();
+        placeLayer.showPlace(fliterPlaces);
+        placeLayer.force.start();
+      };
+      document.getElementById('checkbox6').onclick = function() {
+        var filterCategory = document.getElementById('checkbox6').nextSibling.innerHTML.replace(' ','');
+        filterCategory = filterCategory.replace('amp;','');
+        if(this.checked == true)
+          foodFilter.setFilter(filterCategory, false);
+        else
+          foodFilter.setFilter(filterCategory, true);
+        var fliterPlaces = foodFilter.returnPlaces();
+        placeLayer.showPlace(fliterPlaces);
+        placeLayer.force.start();
       };
       // place layer setup
       PlaceLayer.prototype = new google.maps.OverlayView();

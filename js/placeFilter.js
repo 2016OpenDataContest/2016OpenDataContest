@@ -5,7 +5,9 @@ function PlaceFilter(map)
     var _category;
     var _places = [];
     var _filter = [];
-    
+    var _filterplaces = [];
+    var tuples = [];
+
     _obj.returnTopFive = function() {
         // sort the place ID according to rating and review_count
         var sortList = [];
@@ -36,6 +38,7 @@ function PlaceFilter(map)
         _filter.splice(Idx, 1);
       }
       console.log(_filter);
+      checkFilter();
     }
     _obj.setCategory = function (c) {
       _category = c;
@@ -65,7 +68,7 @@ function PlaceFilter(map)
                //console.log(_places[i].info.categories[j][0] + ' ' + typeList[_places[i].info.categories[j][0]]);
             }
         }
-        var tuples = [];
+     tuples = [];
         for (var key in typeList) {
             tuples.push([key, typeList[key]]);
             //console.log(key + ' ' + typeList[key] );
@@ -88,7 +91,9 @@ function PlaceFilter(map)
     {
         _places = _places.filter(checkInbound); 
     }
-
+    _obj.returnPlaces = function() {
+        return _filterplaces;
+    }
 
     function removeOutLength()
     {
@@ -119,5 +124,53 @@ function PlaceFilter(map)
             var eraseID = deleteList.pop();
             _places.splice(eraseID, 1);
         }
+    }
+    function checkFilter(){
+        _filterplaces=[];
+        var index ;
+        var caseWithOther=0;
+        for (var k = 0; k < _filter.length; k+=1)
+            if(_filter[k]==="Others")
+                caseWithOther=1;
+        if(caseWithOther==0){
+            for (var i = 0; i < _places.length; i+=1) {
+                index = _places[i].info.categories.length;
+                for (var j = 0; j < _places[i].info.categories.length; j+=1) {
+                    for (var k = 0; k < _filter.length; k+=1) {
+                        if (_places[i].info.categories[j][1] === _category )
+                            index-=1;
+                        if (_places[i].info.categories[j][0] === _filter[k])
+                            index-=1;
+                    }
+                   //console.log(_places[i].info.categories[j][0] + ' ' + typeList[_places[i].info.categories[j][0]]);
+                }
+                if(index != 0)
+                _filterplaces.push(_places[i]);
+            }
+        }
+        else{
+            for (var i = 0; i < _places.length; i+=1) {
+                index = 0;
+                for (var j = 0; j < _places[i].info.categories.length; j+=1) {
+                    for (var k = 0; k < _filter.length; k+=1) {
+                        if (_places[i].info.categories[j][1] === _category )
+                            index-=1;
+                        if (_places[i].info.categories[j][0] === _filter[k])
+                            index-=1;
+                    }
+                    for (var k = 0; k < 5; k+=1) {
+                        if (_places[i].info.categories[j][0] === tuples[k][0])
+                            //console.log(tuples[k][0]);
+                            index+=1;
+                    }
+                   //console.log(_places[i].info.categories[j][0] + ' ' + typeList[_places[i].info.categories[j][0]]);
+                }
+                if(index > 0)
+                _filterplaces.push(_places[i]);
+            console.log(index);
+            }
+        }
+        console.log(_filterplaces);
+
     }
 };
