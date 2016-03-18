@@ -222,24 +222,35 @@
         
         var numberOfCheckBox = 6; // how many checkbox 
         // update filter
-        for (var i = 0; i < Math.min(typeList.length, numberOfCheckBox); i+=1) {
-           if (i < numberOfCheckBox - 1){
-               var checkboxIdx = 'checkbox' + (i + 1);
-               document.getElementById(checkboxIdx).setAttribute("style","visibility:visible");
-               document.getElementById(checkboxIdx).checked = true; 
-               document.getElementById(checkboxIdx).nextSibling.innerHTML = ' ' + typeList[i][0];
-           } else {
-               var checkboxIdx = 'checkbox' + (i + 1);
-               document.getElementById(checkboxIdx).setAttribute("style","visibility:visible");
-               document.getElementById(checkboxIdx).checked = true;  
-               document.getElementById(checkboxIdx).nextSibling.innerHTML = ' others';
-           }
+        if (typeList.length > 0) {
+            for (var i = 0; i < Math.min(typeList.length, numberOfCheckBox); i+=1) {
+               if (i < numberOfCheckBox - 1){
+                   var checkboxIdx = 'checkbox' + (i + 1);
+                   document.getElementById(checkboxIdx).setAttribute("style","visibility:visible");
+                   document.getElementById(checkboxIdx).checked = true; 
+                   document.getElementById(checkboxIdx).nextSibling.innerHTML = ' ' + typeList[i][0];
+               } else {
+                   var checkboxIdx = 'checkbox' + (i + 1);
+                   document.getElementById(checkboxIdx).setAttribute("style","visibility:visible");
+                   document.getElementById(checkboxIdx).checked = true;  
+                   document.getElementById(checkboxIdx).nextSibling.innerHTML = ' Others';
+               }
+            }
         }
         if (typeList.length < numberOfCheckBox) {
               var checkboxIdx = 'checkbox' + (typeList.length + 1);
-               document.getElementById(checkboxIdx).setAttribute("style","visibility:visible");
-               document.getElementById(checkboxIdx).checked = true;  
-               document.getElementById(checkboxIdx).nextSibling.innerHTML = ' others';
+              document.getElementById(checkboxIdx).setAttribute("style","visibility:visible");
+              document.getElementById(checkboxIdx).checked = true;
+              if (typeList.length > 0)  
+                  document.getElementById(checkboxIdx).nextSibling.innerHTML = ' Others';
+              else
+                  document.getElementById(checkboxIdx).nextSibling.innerHTML = ' All';
+              for (var i = typeList.length + 1; i < numberOfCheckBox; i+=1) {
+                  checkboxIdx = 'checkbox' + (i + 1);
+                  document.getElementById(checkboxIdx).setAttribute("style","visibility:hidden");
+                  document.getElementById(checkboxIdx).checked = true;  
+                  document.getElementById(checkboxIdx).nextSibling.innerHTML = '';
+              }
         }
         placeLayer.showPlace(mergedPlaces);
 		    placeLayer.force.start();
