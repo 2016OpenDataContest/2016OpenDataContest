@@ -55,7 +55,8 @@ function PlaceLayer(map) {
             fixed: false,
             color: color(),
             x : place.x,
-            y : place.y
+            y : place.y,
+            borderColor: 0
         };
         if(undefined === ret.radius || ret.radius < 10)
             ret.radius = 10;
@@ -70,7 +71,8 @@ function PlaceLayer(map) {
             radius : 5,
             color : "#777777",
             x : place.x,
-            y : place.y
+            y : place.y,
+            borderColor: 0
         };
 
         return ret;
@@ -118,12 +120,23 @@ function PlaceLayer(map) {
         // build big nodes
         for (var i in places) 
             ret.push(createLargeNode(places[i]));
+
+        setBorderColor(ret);
         
         // fix the px when zooming
         for (var i = 0 ; i < ret.length/2 ; i+=1)
             laglng2px(ret[i]);
 
         return ret;
+    }
+
+    function setBorderColor(nodes)
+    {
+        var max_review_count = Math.max.apply(Math,nodes.map(function(o){return o.info.review_count;}))
+        var min_review_count = Math.min.apply(Math,nodes.map(function(o){return o.info.review_count;}))
+        var totalRange = max_review_count - min_review_count;
+        for (var i = 0 ; i < nodes.length ; i += 1)
+            nodes[i].borderColor = parseInt(nodes[i].info.review_count/totalRange*255);
     }
 
     // use _places to build edges
@@ -279,16 +292,10 @@ function PlaceLayer(map) {
             div.style("display","none");
         else
             div.style("display","inline");
-
-
-        
-
-        var saturation = 255;
-        if(d.info.review_count !== undefined)
-            saturation = Math.min(( d.info.review_count * 15 ),255);
-        else 
-            saturation = 0;
-
+       
+        var saturation = d.borderColor;
+        if(d.borderColor === undefined)
+            console.log("**WARRN");
         // div style (circle)
         div.style('width'      , (d.radius * 2) + 'px' )
            .style('height'     , (d.radius * 2) + 'px' )
