@@ -168,12 +168,14 @@
         foodFilter.setCategory('');
         foodRefresh.setCategory('');
         foodRefresh.nearbySearch();
+        foodFilter.resetFilter();
       };
       document.getElementById('selection2').onclick = function() {
         foodMerge.resetPlaces();
         foodFilter.setCategory('breakfast_brunch');
         foodRefresh.setCategory('breakfast_brunch');
         foodRefresh.nearbySearch();
+        foodFilter.resetFilter();
         //document.getElementById('checkbox1').setAttribute("style","visibility:hidden"); 
       };
       document.getElementById('selection3').onclick = function() {
@@ -181,6 +183,7 @@
         foodFilter.setCategory('vegetarian');
         foodRefresh.setCategory('vegetarian');
         foodRefresh.nearbySearch();
+        foodFilter.resetFilter();
         //document.getElementById('checkbox1').setAttribute("style","visibility:visible");
       };
       document.getElementById('selection4').onclick = function() {
@@ -188,30 +191,35 @@
         foodFilter.setCategory('tradamerican');
         foodRefresh.setCategory('tradamerican');
         foodRefresh.nearbySearch();
+        foodFilter.resetFilter();
       };
       document.getElementById('selection5').onclick = function() {
         foodMerge.resetPlaces();
         foodFilter.setCategory('asianfusion');
         foodRefresh.setCategory('asianfusion');
         foodRefresh.nearbySearch();
+        foodFilter.resetFilter();
       };
       document.getElementById('selection6').onclick = function() {
         foodMerge.resetPlaces();
         foodFilter.setCategory('buffets');
         foodRefresh.setCategory('buffets');
         foodRefresh.nearbySearch();
+        foodFilter.resetFilter();
       };
       document.getElementById('selection7').onclick = function() {
         foodMerge.resetPlaces();
         foodFilter.setCategory('chinese');
         foodRefresh.setCategory('chinese');
         foodRefresh.nearbySearch();
+        foodFilter.resetFilter();
       };
       document.getElementById('selection8').onclick = function() {
         foodMerge.resetPlaces();
         foodFilter.setCategory('cafes');
         foodRefresh.setCategory('cafes');
         foodRefresh.nearbySearch();
+        foodFilter.resetFilter();
       };
 
       //checkbox operation
@@ -240,7 +248,7 @@
       document.getElementById('checkbox2').onclick = function() {
         var filterCategory = document.getElementById('checkbox2').nextSibling.innerHTML.replace(' ','');
         filterCategory = filterCategory.replace('amp;','');
-        console.log(filterCategory);
+        //console.log(filterCategory);
         if(this.checked == true)
           foodFilter.setFilter(filterCategory, false);
         else
@@ -400,7 +408,7 @@
         // print top 5
         var topFive = foodFilter.returnTopFive();
         var awardIdx;
-        console.log(topFive);
+        //console.log(topFive);
         for(var i = 1; i <= 5; i+=1) {
           awardIdx = 'award' + i;
           document.getElementById(awardIdx).innerText = '';
@@ -428,6 +436,7 @@
         //searchBox.setBounds(map.getBounds());
         foodRefresh.nearbySearch();
         parkingRefresh.nearbySearch(['parking']);
+        foodFilter.resetFilter();
       });
 
       // event listener when drag view
@@ -436,6 +445,7 @@
           //searchBox.setBounds(map.getBounds());
           foodRefresh.nearbySearch();
           parkingRefresh.nearbySearch(['parking']);
+        foodFilter.resetFilter();
         });
       });
 
@@ -445,6 +455,7 @@
         foodMerge.resetPlaces();
         foodRefresh.nearbySearch();
         parkingRefresh.nearbySearch(['parking']);
+        foodFilter.resetFilter();
       });
       
   }
