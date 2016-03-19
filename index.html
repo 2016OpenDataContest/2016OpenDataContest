@@ -9,13 +9,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="css/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
 
     <script  src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places,visualization"></script>
     <script type="text/javascript" src="http://www.parsecdn.com/js/parse-1.5.0.min.js"></script>
     <script async src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
     
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
-
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
     <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
     <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
 
@@ -32,53 +34,39 @@
   </head>
   <body>
 
-      <section class="page-header"><!--section-->
-        <div style="float:left;width:30%;">
-          <h1 class="project-name">食啥 | JASA</h1>
-        </div>
-        <div style="float:left; width:60%">
-          <h2 class="project-tagline">帶您快速瞭解在地美食，不讓您的肚子留下遺憾！</h2>
-        </div>
-      </section> 
-
-      
       <div class="googleDIV">
         <section class="main-content"><!--section-->
           <div id="map-canvas"></div>
         </section>
       </div>
-      <div id="likeDIV">
-        <img id="likeIMG" src="./img/custom_like_button.png"/>
-      </div>
-      <div id="dislikeDIV">
-        <img id="dislikeIMG" src="./img/custom_dislike_button.png"/>
-      </div>       
       
-      <section class="main-left"> <!--section-->
-        <br/>
-        <input id="place-input" class="controls" type="text" placeholder="Where to eat ?">
-        <br/>
-        <br/>
-        <fieldset>
-        <legend><label style="color: #fcc800; font-size: 1.6rem; font-weight: bold; font-family: cursive;"> Category </label></legend>
-        <div class="btn-group">
-        <input type="radio" name="selections" id="selection1" autocomplete="off" checked ><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> Recommand </label>
-        <br/>
-        <input type="radio" name="selections" id="selection4" autocomplete="off"><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> American </label>
-        <br/>
-        <input type="radio" name="selections" id="selection5" autocomplete="off"><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> Asian </label>
-        <br/>
-        <input type="radio" name="selections" id="selection2" autocomplete="off" onclick=""><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> Breakfast & Brunch </label>
-        <br/>
-        <input type="radio" name="selections" id="selection6" autocomplete="off"><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> Buffets </label>
-        <br/>
-        <input type="radio" name="selections" id="selection7" autocomplete="off"><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> Chinese </label>
-        <br/>
-        <input type="radio" name="selections" id="selection8" autocomplete="off"><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> Cafes </label>
+      <section class="col-md-3"> <!--section-->
+          <img src="img/logo.png" alt="Mountain View" style="width:200px;height:200px;display: block;margin-left: auto;margin-right: auto; margin-top: 20px; margin-bottom: 20px">
+        <div class="input-group">
+          <input id="place-input" type="text" class="form-control" placeholder="Where to eat ?">
+          <span class="input-group-btn">
+            <button class="btn btn-default" type="button">Go!</button>
+          </span>
         </div>
-        <input type="radio" name="selections" id="selection3" autocomplete="off"><label style="color: #fcc800; font-family: cursive;font-weight: bold;"> Vegetarian </label>
-        </fieldset>
-        <br/>
+        <legend><h2> Category </h2></legend>
+        <div   class="btn-group" data-toggle="buttons">
+          <label class="btn btn-primary active">
+            <input type="radio" name="options" id="option1" autocomplete="off" checked >Recommand </label>
+          <label class="btn btn-primary ">
+            <input type="radio" name="options" id="option4" autocomplete="off">American </label>
+          <label class="btn btn-primary ">
+            <input type="radio" name="options" id="option5" autocomplete="off">Asian </label>
+          <label class="btn btn-primary ">
+            <input type="radio" name="options" id="option2" autocomplete="off" onclick="">Breakfast & Brunch </label>
+          <label class="btn btn-primary ">
+            <input type="radio" name="options" id="option6" autocomplete="off">Buffets </label>
+          <label class="btn btn-primary ">
+            <input type="radio" name="options" id="option7" autocomplete="off">Chinese </label>
+          <label class="btn btn-primary ">
+            <input type="radio" name="options" id="option8" autocomplete="off">Cafes </label>
+          <label class="btn btn-primary ">
+            <input type="radio" name="options" id="option3" autocomplete="off">Vegetarian </label>
+        </div>
         <fieldset>
         <legend><label style="color: #007b43; font-size: 1.6rem; font-weight: bold; font-family: cursive;"> Filter </label></legend>
           <input type="checkbox" id="checkbox1" autocomplete="off" style="visibility: hidden" checked ><label style="color: #007b43; font-family: cursive;font-weight: bold;"></label>
@@ -163,51 +151,51 @@
       searchBoxInit(searchBox);
       
       // Give selection onclick function
-      document.getElementById('selection1').onclick = function() {
+      document.getElementById('option1').onclick = function() {
         foodMerge.resetPlaces();
         foodFilter.setCategory('');
         foodRefresh.setCategory('');
         foodRefresh.nearbySearch();
       };
-      document.getElementById('selection2').onclick = function() {
+      document.getElementById('option2').onclick = function() {
         foodMerge.resetPlaces();
         foodFilter.setCategory('breakfast_brunch');
         foodRefresh.setCategory('breakfast_brunch');
         foodRefresh.nearbySearch();
         //document.getElementById('checkbox1').setAttribute("style","visibility:hidden"); 
       };
-      document.getElementById('selection3').onclick = function() {
+      document.getElementById('option3').onclick = function() {
         foodMerge.resetPlaces();
         foodFilter.setCategory('vegetarian');
         foodRefresh.setCategory('vegetarian');
         foodRefresh.nearbySearch();
         //document.getElementById('checkbox1').setAttribute("style","visibility:visible");
       };
-      document.getElementById('selection4').onclick = function() {
+      document.getElementById('option4').onclick = function() {
         foodMerge.resetPlaces();
         foodFilter.setCategory('tradamerican');
         foodRefresh.setCategory('tradamerican');
         foodRefresh.nearbySearch();
       };
-      document.getElementById('selection5').onclick = function() {
+      document.getElementById('option5').onclick = function() {
         foodMerge.resetPlaces();
         foodFilter.setCategory('asianfusion');
         foodRefresh.setCategory('asianfusion');
         foodRefresh.nearbySearch();
       };
-      document.getElementById('selection6').onclick = function() {
+      document.getElementById('option6').onclick = function() {
         foodMerge.resetPlaces();
         foodFilter.setCategory('buffets');
         foodRefresh.setCategory('buffets');
         foodRefresh.nearbySearch();
       };
-      document.getElementById('selection7').onclick = function() {
+      document.getElementById('option7').onclick = function() {
         foodMerge.resetPlaces();
         foodFilter.setCategory('chinese');
         foodRefresh.setCategory('chinese');
         foodRefresh.nearbySearch();
       };
-      document.getElementById('selection8').onclick = function() {
+      document.getElementById('option8').onclick = function() {
         foodMerge.resetPlaces();
         foodFilter.setCategory('cafes');
         foodRefresh.setCategory('cafes');
