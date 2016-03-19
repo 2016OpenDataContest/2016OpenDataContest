@@ -92,8 +92,8 @@ function PlaceRefresh(googleMap , googlePlace){
                 var centerControlDiv = document.createElement('div');
                 var centerControl = new _callbackCenterControl(centerControlDiv, map, data);
                 centerControlDiv.index = 1;
-                map.controls[google.maps.ControlPosition.RIGHT_CENTER].clear();
-                map.controls[google.maps.ControlPosition.RIGHT_CENTER].push(centerControlDiv);
+                map.controls[google.maps.ControlPosition.TOP_CENTER].clear();
+                map.controls[google.maps.ControlPosition.TOP_CENTER].push(centerControlDiv);
             }
         });
         

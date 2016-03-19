@@ -9,6 +9,8 @@ function PlaceFilter(map)
     var tuples = [];
 
     _obj.returnTopFive = function() {
+        
+        //checkFilter();
         // sort the place ID according to rating and review_count
         var sortList = [];
         for (var i = 0 ; i < _filterplaces.length ; i+=1)
@@ -23,7 +25,7 @@ function PlaceFilter(map)
         var topFiveList = [];
         for (var i = 0; i < Math.min(_filterplaces.length, 5); i+=1)
             topFiveList.push(_filterplaces[sortList[i]]);
-        console.log(topFiveList);
+        //console.log(topFiveList);
         return topFiveList;
     }
     
@@ -47,7 +49,8 @@ function PlaceFilter(map)
     _obj.findInBoundPlaces = function(p) {
         _places = p;
         removeOutbounds();
-        _filterplaces = _places;
+        //_filterplaces = _places;
+        //checkFilter();
         return _places;
     }
 
@@ -57,7 +60,7 @@ function PlaceFilter(map)
 
     _obj.summaryType = function(p) {
         _places = p;
-        //_filterplaces = _places; // maybe redundant
+        _filterplaces = _places; // maybe redundant
         var typeList = new Array();
         for (var i = 0; i < _places.length; i+=1) {
             for (var j = 0; j < _places[i].info.categories.length; j+=1) {
@@ -80,8 +83,11 @@ function PlaceFilter(map)
             b = b[1];
             return b - a;
         });
-        console.log(tuples);
+        //console.log(tuples);
         return tuples;
+    }
+    _obj.returnPlaces = function() {
+        return _filterplaces;
     }
     function checkInbound(place)
     {
@@ -93,9 +99,7 @@ function PlaceFilter(map)
     {
         _places = _places.filter(checkInbound); 
     }
-    _obj.returnPlaces = function() {
-        return _filterplaces;
-    }
+    
 
     function removeOutLength()
     {
@@ -136,27 +140,40 @@ function PlaceFilter(map)
                 caseWithOther=1;
         if(caseWithOther==0){
             for (var i = 0; i < _places.length; i+=1) {
+
                 index = _places[i].info.categories.length;
+                byCategory=0;
                 for (var j = 0; j < _places[i].info.categories.length; j+=1) {
+                    if (_places[i].info.categories[j][1] === _category ){
+                            index-=1;
+                            byCategory=1;
+                        }
                     for (var k = 0; k < _filter.length; k+=1) {
-                        if (_places[i].info.categories[j][1] === _category )
+                        
+                        if (_places[i].info.categories[j][0] === _filter[k]){
                             index-=1;
-                        if (_places[i].info.categories[j][0] === _filter[k])
-                            index-=1;
+                        }
                     }
                    //console.log(_places[i].info.categories[j][0] + ' ' + typeList[_places[i].info.categories[j][0]]);
                 }
-                if(index != 0)
-                _filterplaces.push(_places[i]);
+                //if(_places[i].info.id==="the-v-f舞蔬弄果-信義旗艦店-台北市大安區")
+                if(index > 0||(_places[i].info.categories.length == 1 && byCategory == 1)){
+                    _filterplaces.push(_places[i]);
+                     //console.log(index+"  "+_places[i]);
+                     //console.log(_filterplaces);
+                }
+            //console.log(index);
             }
+        console.log(_filterplaces);
+
         }
         else{
             for (var i = 0; i < _places.length; i+=1) {
                 index = 0;
                 for (var j = 0; j < _places[i].info.categories.length; j+=1) {
                     for (var k = 0; k < _filter.length; k+=1) {
-                        if (_places[i].info.categories[j][1] === _category )
-                            index-=1;
+                        //if (_places[i].info.categories[j][1] === _category )
+                            //index-=1;
                         if (_places[i].info.categories[j][0] === _filter[k])
                             index-=1;
                     }
@@ -169,10 +186,9 @@ function PlaceFilter(map)
                 }
                 if(index > 0)
                 _filterplaces.push(_places[i]);
-            console.log(index);
+            //console.log(index);
             }
         }
-        console.log(_filterplaces);
 
     }
 };
