@@ -304,7 +304,6 @@ function PlaceLayer(map) {
            .style("left", d.x + "px")
            .style("top",  d.y + "px")
            .style('border-color', 'rgb(' + parseInt(Math.min(saturation*2,255)) + ',' + parseInt(saturation/5) + ','+parseInt(saturation/2)+')');
-
         // open information
         div.html("");
         if(d.fixed === false){
@@ -483,6 +482,7 @@ function PlaceLayer(map) {
         d3.select("#dislikeDIV").style("visibility","hidden");
 
         //var parseOperation = new ParseOperation();
+        /*
         var valid = length > 150;
         var like = (d.x > d3.select("#dislikeDIV").node().getBoundingClientRect().width);
         map.set('draggable',true);
@@ -497,7 +497,7 @@ function PlaceLayer(map) {
             .style("left", d.x + "px")
             .style("top",  d.y + "px");
         _selectionEdge.each(edgeTransition);
-        _obj.force.resume();
+        _obj.force.resume();*/
     }
 
 }

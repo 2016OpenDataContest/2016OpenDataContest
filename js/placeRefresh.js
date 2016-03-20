@@ -86,6 +86,7 @@ function PlaceRefresh(googleMap , googlePlace){
             'url' : message.action,
             'data' : parameterMap,
             'dataType' : 'jsonp',
+            'cache': true,
             'jsonpCallback' : 'cb',
             'success' : function(data, textStats, XMLHttpRequest) {
                 console.log(data);
@@ -189,9 +190,14 @@ function PlaceRefresh(googleMap , googlePlace){
             'data' : parameterMap,
             'dataType' : 'jsonp',
             'jsonpCallback' : 'cb',
+            'cache': true,
             'success' : function(data, textStats, XMLHttpRequest) {
                 //console.log(data);
                 yelpUpdatePlace(data , textStats);
+                },
+             'error': function(xhr, status, error) {
+                    var err = eval("(" + xhr.responseText + ")");
+                    alert(err.Message);
             }
         });
       /*
