@@ -196,8 +196,7 @@ function PlaceRefresh(googleMap , googlePlace){
                 yelpUpdatePlace(data , textStats);
                 },
              'error': function(xhr, status, error) {
-                    var err = eval("(" + xhr.responseText + ")");
-                    alert(err.Message);
+                    alert("error");
             }
         });
       /*

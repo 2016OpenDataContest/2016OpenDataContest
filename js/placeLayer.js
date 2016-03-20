@@ -412,10 +412,9 @@ function PlaceLayer(map) {
     }
 
     function color () {
-        var alpha = 0.9;
-        var beautifulColor = ["rgba(11, 221, 24,0.9)","rgba(29, 98, 240 , 0.9)","rgba(255, 42, 104, 0.9)","rgba(255,205,2,0.9)"];
+        var beautifulColor = ["#E3B505","#95190C","#610345","#107E7D","#044B7F"];
         
-        return beautifulColor[Math.floor((Math.random() * 4) + 0)];
+        return beautifulColor[Math.floor((Math.random() * 5) + 0)];
     }
     function mobileAndTabletcheck () {
           var check = false;
