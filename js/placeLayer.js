@@ -185,6 +185,7 @@ function PlaceLayer(map) {
         var tick = 0;
         this.force = d3.layout.force()
             .gravity(0)
+            //.charge(-30)
             .charge(-30)
             .nodes(nodes)
             .links(edges)
@@ -195,11 +196,11 @@ function PlaceLayer(map) {
                 // prevent overlaped nodes
                 
                 var q = d3.geom.quadtree(nodes);
-                for(var i = nodes.length/2 ;i < nodes.length ; i++) {
+                for(var i = 0 ;i < nodes.length ; i++) {
                     q.visit(collide(nodes[i]));
                 }
                 // redering nodes
-                if(tick++%3==0 && tick > 2) {
+                if(tick++%4==0 && tick > 2) {
                     _selectionNode.each(nodeTransition);
                     _selectionEdge.each(edgeTransition);
                 }
@@ -389,7 +390,7 @@ function PlaceLayer(map) {
 
     // prevent overlap nodes
     function collide(node) {
-      var r = node.radius,
+      var r = node.radius + 16,
           nx1 = node.x - r,
           nx2 = node.x + r,
           ny1 = node.y - r,
@@ -401,7 +402,7 @@ function PlaceLayer(map) {
               l = Math.sqrt(x * x + y * y),
               r = node.radius + quad.point.radius;
           if (l < r) {
-            l = (l - r) / l * .2;
+            l = (l - r) / l * .5;
             node.x -= x *= l;
             node.y -= y *= l;
             quad.point.x += x;
