@@ -185,9 +185,10 @@ function PlaceLayer(map) {
         var tick = 0;
         this.force = d3.layout.force()
             .gravity(0)
-            .charge(-20)
+            .charge(-30)
             .nodes(nodes)
             .links(edges)
+            .friction(0.3)
             .size([this.getPanes().overlayLayer.scrollWidth, this.getPanes().overlayLayer.scrollHeight])
             .linkDistance(this.getPanes().overlayLayer.scrollWidth/15)
             .on('tick', function (e) {
@@ -198,7 +199,7 @@ function PlaceLayer(map) {
                     q.visit(collide(nodes[i]));
                 }
                 // redering nodes
-                if(tick++%1==0 && tick > 2) {
+                if(tick++%3==0 && tick > 2) {
                     _selectionNode.each(nodeTransition);
                     _selectionEdge.each(edgeTransition);
                 }
@@ -388,7 +389,7 @@ function PlaceLayer(map) {
 
     // prevent overlap nodes
     function collide(node) {
-      var r = node.radius + 20,
+      var r = node.radius,
           nx1 = node.x - r,
           nx2 = node.x + r,
           ny1 = node.y - r,

@@ -437,14 +437,14 @@
 
   function showTop5(topFive)
   {
-        //console.log(topFive);
+                                                                                                                           console.log(topFive);
         for(var i = 0; i < 5; i+=1) {
           var awardIdx = 'top' + (i+1).toString();
-          document.getElementById(awardIdx + "-name").innerText= topFive[i].info.name;
+          $("#" + awardIdx + "-name").html(topFive[i].info.name);
           if(topFive[i].info.snippet_text != undefined)
-              document.getElementById(awardIdx + "-abstract").innerText= topFive[i].info.snippet_text;
+              $("#" + awardIdx + "-abstract").html(topFive[i].info.snippet_text);
           else
-              document.getElementById(awardIdx + "-abstract").innerText='';
+              $("#" + awardIdx + "-abstract").html("");
 
           $("#" + awardIdx + "-img").attr("src",topFive[i].info.image_url);
           $("#" + awardIdx + "-link").attr("href",topFive[i].info.url);
