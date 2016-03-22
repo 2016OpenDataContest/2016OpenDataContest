@@ -200,7 +200,8 @@ function PlaceLayer(map) {
                     q.visit(collide(nodes[i]));
                 }
                 // redering nodes
-                if(tick++%4==0 && tick > 2) {
+                //if(tick++%3==0 && tick > 2) {
+                {
                     _selectionNode.each(nodeTransition);
                     _selectionEdge.each(edgeTransition);
                 }
@@ -482,6 +483,7 @@ function PlaceLayer(map) {
         d3.select("#likeDIV").style("visibility","hidden");  
         d3.select("#dislikeDIV").style("visibility","hidden");
 
+        _obj.force.start();
         //var parseOperation = new ParseOperation();
         /*
         var valid = length > 150;
