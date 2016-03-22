@@ -391,7 +391,7 @@ function PlaceLayer(map) {
 
     // prevent overlap nodes
     function collide(node) {
-      var r = node.radius + 16,
+      var r = node.radius + 100,
           nx1 = node.x - r,
           nx2 = node.x + r,
           ny1 = node.y - r,
